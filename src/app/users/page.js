@@ -1,7 +1,7 @@
 // app/users/page.js
 "use client";
-import { useState } from "react";
-import Table from "./Table";
+import { useRef, useState } from "react";
+import Table from "../../Components/Table";
 export default function Users() {
   const [Users, setUsers] = useState([
     {
@@ -29,6 +29,18 @@ export default function Users() {
       PassWord: "1234",
     },
   ]);
+  const dialog = useRef();
+  function OpenDialog() {
+    dialog.current.show();
+  }
+  function Closedialog() {
+    dialog.current.close();
+  }
+  function Clickoutside(e) {
+    if (e.target === dialog.current) {
+      Closedialog();
+    }
+  }
   console.log(Users);
   return (
     <main className=" p-6 bg-gray-100 md:w-[1320px]">
@@ -36,12 +48,26 @@ export default function Users() {
         <h1 className="md:text-3xl font-bold ">จัดการบัญชีผู้ใช้งาน</h1>
         <button
           className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-white ml-4"
-          onClick={() => alert("เพิ่มผู้ใช้")}
+          onClick={() => OpenDialog()}
         >
           Add User
         </button>
       </div>
-
+      <dialog
+        ref={dialog}
+        className=" w-[240px] h-[240px] bg-gray-200 p-2 "
+        onClick={(e) => Clickoutside(e)}
+      >
+        <div>
+          <h1>Add User</h1>
+        </div>
+        <button
+          className="bg-slate-600 hover:bg-slate-700 px-3 py-1 rounded text-white ml-4"
+          onClick={() => Closedialog()}
+        >
+          Close
+        </button>
+      </dialog>
       <Table Users={Users} />
     </main>
   );

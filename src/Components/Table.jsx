@@ -16,10 +16,8 @@ function Table({ Users }) {
         </thead>
         <tbody>
           {Users.map((user, index) => (
-            <tr key={user.id} className="border-b border-gray-600">
-              <td className="p-2 text-center" key={index}>
-                {index}
-              </td>
+            <tr key={index} className="border-b border-gray-600">
+              <td className="p-2 text-center">{index}</td>
               <td className="p-2">{user.UserName}</td>
               <td className="p-2">{user.LastName}</td>
               <td className="p-2">{user.role}</td>
