@@ -2,6 +2,7 @@
 "use client";
 import { useRef, useState } from "react";
 import Table from "../../Components/Table";
+import AddUserdialog from "@/Components/AddUserdialog";
 export default function Users() {
   const [Users, setUsers] = useState([
     {
@@ -31,16 +32,19 @@ export default function Users() {
   ]);
   const dialog = useRef();
   function OpenDialog() {
-    dialog.current.show();
+    if (dialog.current) {
+      dialog.current.showModal();
+    }
   }
   function Closedialog() {
     dialog.current.close();
   }
-  function Clickoutside(e) {
+  const clickoutside = (e) => {
     if (e.target === dialog.current) {
       Closedialog();
     }
-  }
+  };
+
   console.log(Users);
   return (
     <main className=" p-6 bg-gray-100 md:w-[1320px]">
@@ -53,21 +57,11 @@ export default function Users() {
           Add User
         </button>
       </div>
-      <dialog
+      <AddUserdialog
         ref={dialog}
-        className=" w-[240px] h-[240px] bg-gray-200 p-2 "
-        onClick={(e) => Clickoutside(e)}
-      >
-        <div>
-          <h1>Add User</h1>
-        </div>
-        <button
-          className="bg-slate-600 hover:bg-slate-700 px-3 py-1 rounded text-white ml-4"
-          onClick={() => Closedialog()}
-        >
-          Close
-        </button>
-      </dialog>
+        Closedialog={Closedialog}
+        clickoutside={clickoutside}
+      />
       <Table Users={Users} />
     </main>
   );
