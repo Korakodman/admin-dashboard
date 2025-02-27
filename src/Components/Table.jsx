@@ -1,24 +1,32 @@
 import React, { useRef, useState } from "react";
+import OptionDialog from "./OptionDialog";
 
-function Table({ Users }) {
+function Table({ Users, DeleteOption }) {
   const FormDialog = useRef();
   const [DialogOption, SetDialogOption] = useState();
   const [SelectUser, SetSelectUser] = useState([]);
-  const OpenDialog = (user) => {
+  const [SelectIndexID, SetSelectIndexID] = useState(null);
+  const OpenDialog = (user, index) => {
     FormDialog.current.showModal();
-    console.log(user);
     SetSelectUser(user);
+    SetSelectIndexID(index);
   };
   const CloseDialog = () => {
     FormDialog.current.close();
   };
   const clickoutside = (e) => {
     if (e.target === FormDialog.current) {
-      CloseDialog();
+      CloseDialog(SelectIndexID);
     }
   };
   const FormOption = (e) => {
     e.preventDefault();
+    if (DialogOption) {
+      DeleteOption(SelectIndexID);
+      CloseDialog();
+    } else {
+      console.log("แก้ไข");
+    }
   };
   return (
     <div className="p-4 font-serif">
@@ -45,7 +53,7 @@ function Table({ Users }) {
                 <button
                   className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-white"
                   onClick={() => {
-                    OpenDialog(user);
+                    OpenDialog(user, index);
                     SetDialogOption(false);
                   }}
                 >
@@ -54,7 +62,7 @@ function Table({ Users }) {
                 <button
                   className="bg-red-600 hover:bg-red-700 px-3 py-1 ml-2 rounded text-white"
                   onClick={() => {
-                    OpenDialog(user);
+                    OpenDialog(user, index);
                     SetDialogOption(true);
                   }}
                 >
@@ -66,24 +74,16 @@ function Table({ Users }) {
         </tbody>
       </table>
       <div>
-        <dialog
-          className="w-[400px] h-fit rounded-md p-4 border-black bg-gray-200 shadow-md "
-          onClick={(e) => clickoutside(e)}
+        <OptionDialog
           ref={FormDialog}
-        >
-          <form onSubmit={(e) => FormOption(e)}>
-            <div>{DialogOption ? "Delete User" : "Edit User"}</div>
-            <div>Name{DialogOption ? "" : SelectUser.UserName}</div>
-            <div className=" flex justify-end">
-              <button
-                className=" bg-gray-400 p-2 hover:bg-gray-500 rounded-md"
-                onClick={CloseDialog}
-              >
-                Close
-              </button>
-            </div>
-          </form>
-        </dialog>
+          DialogOption={DialogOption}
+          SelectUser={SelectUser}
+          SelectIndexID={SelectIndexID}
+          OpenDialog={OpenDialog}
+          CloseDialog={CloseDialog}
+          clickoutside={clickoutside}
+          FormOption={FormOption}
+        />
       </div>
     </div>
   );

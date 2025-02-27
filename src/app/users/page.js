@@ -6,7 +6,32 @@ import AddUserdialog from "@/Components/AddUserdialog";
 export default function Users() {
   const [error, Seterror] = useState(false);
   const [msgeEror, SetmsgeError] = useState();
-  const [Users, setUsers] = useState([]);
+  const [Users, setUsers] = useState([
+    {
+      UserName: "Korakod",
+      LastName: "Manakuilssara",
+      role: "Admin",
+      PassWord: "123456789",
+    },
+    {
+      UserName: "Sahapham",
+      LastName: "thamma",
+      role: "Admin",
+      PassWord: "123456789",
+    },
+    {
+      UserName: "Pusson",
+      LastName: "panna",
+      role: "Admin",
+      PassWord: "123456789",
+    },
+    {
+      UserName: "Rachani",
+      LastName: "paradate",
+      role: "User",
+      PassWord: "123456789",
+    },
+  ]);
   const [radioCheck, SetradioCheck] = useState("");
   const [AddNewUser, setAddNewUser] = useState({
     UserName: "",
@@ -21,12 +46,22 @@ export default function Users() {
     }
   }
   function Closedialog() {
-    setAddNewUser({ UserName: "", LastName: "", role: "", PassWord: "" });
+    setAddNewUser({
+      UserName: "",
+      LastName: "",
+      role: "",
+      PassWord: "",
+    });
     dialog.current.close();
   }
   const clickoutside = (e) => {
     if (e.target === dialog.current) {
-      setAddNewUser({ UserName: "", LastName: "", role: "", PassWord: "" });
+      setAddNewUser({
+        UserName: "",
+        LastName: "",
+        role: "",
+        PassWord: "",
+      });
       Closedialog();
     }
   };
@@ -47,7 +82,12 @@ export default function Users() {
       Seterror(true);
     } else {
       setUsers((prevNewUser) => [...prevNewUser, AddNewUser]);
-      setAddNewUser({ UserName: "", LastName: "", role: "", PassWord: "" });
+      setAddNewUser({
+        UserName: "",
+        LastName: "",
+        role: "",
+        PassWord: "",
+      });
       SetradioCheck("");
       Seterror(false);
       Closedialog();
@@ -79,6 +119,10 @@ export default function Users() {
     SetradioCheck(e.target.value);
   };
   // console.log(Users);
+  const DeleteOption = (id) => {
+    console.log(id);
+    setUsers((prev) => prev.filter((task, index) => index !== id));
+  };
   return (
     <main className=" p-6 bg-gray-100 md:w-[1320px]">
       <div className="text-black font-serif flex">
@@ -105,7 +149,7 @@ export default function Users() {
         radioCheck={radioCheck}
       />
 
-      <Table Users={Users} />
+      <Table Users={Users} DeleteOption={DeleteOption} />
     </main>
   );
 }
