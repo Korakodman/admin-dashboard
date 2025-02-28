@@ -1,11 +1,14 @@
 import React, { useRef, useState } from "react";
 import OptionDialog from "./OptionDialog";
 
-function Table({ Users, DeleteOption }) {
+function Table({ Users, DeleteOption, EditUser }) {
   const FormDialog = useRef();
   const [DialogOption, SetDialogOption] = useState();
-  const [SelectUser, SetSelectUser] = useState([]);
+  const [SelectUser, SetSelectUser] = useState([
+    { UserName: "", LastName: "", role: "", PassWord: "" },
+  ]);
   const [SelectIndexID, SetSelectIndexID] = useState(null);
+
   const OpenDialog = (user, index) => {
     FormDialog.current.showModal();
     SetSelectUser(user);
@@ -25,7 +28,8 @@ function Table({ Users, DeleteOption }) {
       DeleteOption(SelectIndexID);
       CloseDialog();
     } else {
-      console.log("แก้ไข");
+      EditUser(SelectUser, SelectIndexID);
+      CloseDialog();
     }
   };
   return (
@@ -83,6 +87,7 @@ function Table({ Users, DeleteOption }) {
           CloseDialog={CloseDialog}
           clickoutside={clickoutside}
           FormOption={FormOption}
+          SetSelectUser={SetSelectUser}
         />
       </div>
     </div>

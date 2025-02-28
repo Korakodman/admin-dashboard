@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { forwardRef } from "react";
 import style from "./OptionDialog.module.css";
 const OptionDialog = forwardRef(
@@ -10,9 +10,34 @@ const OptionDialog = forwardRef(
       CloseDialog,
       clickoutside,
       FormOption,
+      SetSelectUser,
     },
     ref
   ) => {
+    const handleName = (e) => {
+      SetSelectUser({
+        ...SelectUser,
+        UserName: e.target.value,
+      });
+    };
+    const handleLast = (e) => {
+      SetSelectUser({
+        ...SelectUser,
+        LastName: e.target.value,
+      });
+    };
+    const handlepassword = (e) => {
+      SetSelectUser({
+        ...SelectUser,
+        PassWord: e.target.value,
+      });
+    };
+    const handleInputrole = (e) => {
+      SetSelectUser({
+        ...SelectUser,
+        role: e.target.value,
+      });
+    };
     return (
       <dialog
         className="w-[400px] h-fit rounded-md p-4 border-black bg-gray-200 shadow-md "
@@ -31,13 +56,44 @@ const OptionDialog = forwardRef(
                 <input
                   className={style.EditUser}
                   placeholder="ชื่อผู้ใช้"
+                  value={SelectUser.UserName || ""}
+                  onChange={(e) => handleName(e)}
                 ></input>
-                <input className={style.EditUser} placeholder="นามสกุล"></input>
+                <input
+                  className={style.EditUser}
+                  placeholder="นามสกุล"
+                  value={SelectUser.LastName || ""}
+                  onChange={(e) => handleLast(e)}
+                ></input>
                 <input
                   className={style.EditUser}
                   placeholder="รหัสผ่าน"
-                  type="password"
+                  type="text"
+                  value={SelectUser.PassWord || ""}
+                  onChange={(e) => handlepassword(e)}
                 ></input>
+                <div className="flex ">
+                  <input
+                    type="radio"
+                    id="Admin"
+                    value="Admin"
+                    name="role"
+                    className="mr-2"
+                    onChange={handleInputrole}
+                  />
+                  <label htmlFor="Admin" className="mr-2">
+                    Admin
+                  </label>
+                  <input
+                    type="radio"
+                    id="User"
+                    value="User"
+                    name="role"
+                    className="mr-2"
+                    onChange={handleInputrole}
+                  />
+                  <label htmlFor="User">User</label>
+                </div>
               </div>
             )}
           </div>

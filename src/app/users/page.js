@@ -52,6 +52,7 @@ export default function Users() {
       role: "",
       PassWord: "",
     });
+    SetradioCheck("");
     dialog.current.close();
   }
   const clickoutside = (e) => {
@@ -62,6 +63,7 @@ export default function Users() {
         role: "",
         PassWord: "",
       });
+      SetradioCheck("");
       Closedialog();
     }
   };
@@ -123,6 +125,26 @@ export default function Users() {
     console.log(id);
     setUsers((prev) => prev.filter((task, index) => index !== id));
   };
+  const EditUser = (user, index) => {
+    if (!user) {
+      return;
+    } else {
+      const NewUser = user;
+      setUsers((prev) =>
+        prev.map((item, i) => {
+          if (i === index) {
+            return {
+              UserName: NewUser.UserName,
+              LastName: NewUser.LastName,
+              role: NewUser.role,
+              PassWord: NewUser.PassWord,
+            };
+          }
+          return item;
+        })
+      );
+    }
+  };
   return (
     <main className=" p-6 bg-gray-100 md:w-[1320px]">
       <div className="text-black font-serif flex">
@@ -149,7 +171,7 @@ export default function Users() {
         radioCheck={radioCheck}
       />
 
-      <Table Users={Users} DeleteOption={DeleteOption} />
+      <Table Users={Users} DeleteOption={DeleteOption} EditUser={EditUser} />
     </main>
   );
 }
