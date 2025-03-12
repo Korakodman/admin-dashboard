@@ -33,20 +33,20 @@ const AddUserdialog = forwardRef(
               <input
                 placeholder="FirstName"
                 onChange={(e) => handleInputFirstName(e)}
-                value={AddNewUser.UserName || ""}
+                value={AddNewUser.name || ""}
                 className={style.UserInput}
               />
               <input
                 placeholder="LastName"
                 onChange={(e) => handleInputLastname(e)}
-                value={AddNewUser.LastName || ""}
+                value={AddNewUser.lastname || ""}
                 className={style.UserInput}
               />
               <input
                 placeholder="Password"
                 type="password"
                 onChange={(e) => handleInputPassword(e)}
-                value={AddNewUser.PassWord || ""}
+                value={AddNewUser.password || ""}
                 className={style.UserInput}
               />
               <div className="flex ">

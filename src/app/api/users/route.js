@@ -12,7 +12,7 @@ export async function GET(req) {
 }
 export async function POST(req) {
   await connectToDatabase();
-  const { name, lastname, email, password } = await req.json();
-  const NewUser = await Users.create({ name, lastname, email, password });
+  const { id, name, lastname, role, password } = await req.json();
+  const NewUser = await Users.create({ id, name, lastname, role, password });
   return Response.json(NewUser, { status: 201 });
 }

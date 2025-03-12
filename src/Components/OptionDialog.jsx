@@ -17,19 +17,19 @@ const OptionDialog = forwardRef(
     const handleName = (e) => {
       SetSelectUser({
         ...SelectUser,
-        UserName: e.target.value,
+        name: e.target.value,
       });
     };
     const handleLast = (e) => {
       SetSelectUser({
         ...SelectUser,
-        LastName: e.target.value,
+        lastname: e.target.value,
       });
     };
     const handlepassword = (e) => {
       SetSelectUser({
         ...SelectUser,
-        PassWord: e.target.value,
+        password: e.target.value,
       });
     };
     const handleInputrole = (e) => {
@@ -56,20 +56,20 @@ const OptionDialog = forwardRef(
                 <input
                   className={style.EditUser}
                   placeholder="ชื่อผู้ใช้"
-                  value={SelectUser.UserName || ""}
+                  value={SelectUser.name || ""}
                   onChange={(e) => handleName(e)}
                 ></input>
                 <input
                   className={style.EditUser}
                   placeholder="นามสกุล"
-                  value={SelectUser.LastName || ""}
+                  value={SelectUser.lastname || ""}
                   onChange={(e) => handleLast(e)}
                 ></input>
                 <input
                   className={style.EditUser}
                   placeholder="รหัสผ่าน"
                   type="text"
-                  value={SelectUser.PassWord || ""}
+                  value={SelectUser.password || ""}
                   onChange={(e) => handlepassword(e)}
                 ></input>
                 <div className="flex ">

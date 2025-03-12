@@ -1,43 +1,29 @@
 // app/users/page.js
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Table from "../../Components/Table";
 import AddUserdialog from "@/Components/AddUserdialog";
 export default function Users() {
   const [error, Seterror] = useState(false);
   const [msgeEror, SetmsgeError] = useState();
-  const [Users, setUsers] = useState([
-    {
-      UserName: "Korakod",
-      LastName: "Manakuilssara",
-      role: "Admin",
-      PassWord: "123456789",
-    },
-    {
-      UserName: "Sahapham",
-      LastName: "thamma",
-      role: "Admin",
-      PassWord: "123456789",
-    },
-    {
-      UserName: "Pusson",
-      LastName: "panna",
-      role: "Admin",
-      PassWord: "123456789",
-    },
-    {
-      UserName: "Rachani",
-      LastName: "paradate",
-      role: "User",
-      PassWord: "123456789",
-    },
-  ]);
+
+  const [Users, setUsers] = useState([]);
+
+  useEffect(() => {
+    try {
+      fetch("http://localhost:3000/api/users/")
+        .then((res) => res.json())
+        .then((data) => setUsers(data))
+        .catch((err) => console.log(err));
+    } catch (error) {}
+  }, []);
+  console.log(Users);
   const [radioCheck, SetradioCheck] = useState("");
   const [AddNewUser, setAddNewUser] = useState({
-    UserName: "",
-    LastName: "",
+    name: "",
+    lastname: "",
     role: "",
-    PassWord: "",
+    password: "",
   });
   const dialog = useRef();
   function OpenDialog() {
@@ -47,10 +33,10 @@ export default function Users() {
   }
   function Closedialog() {
     setAddNewUser({
-      UserName: "",
-      LastName: "",
+      name: "",
+      lastname: "",
       role: "",
-      PassWord: "",
+      password: "",
     });
     SetradioCheck("");
     dialog.current.close();
@@ -58,10 +44,10 @@ export default function Users() {
   const clickoutside = (e) => {
     if (e.target === dialog.current) {
       setAddNewUser({
-        UserName: "",
-        LastName: "",
+        name: "",
+        lastname: "",
         role: "",
-        PassWord: "",
+        password: "",
       });
       SetradioCheck("");
       Closedialog();
@@ -70,13 +56,13 @@ export default function Users() {
   const AddUser = (e) => {
     e.preventDefault();
 
-    if (AddNewUser.UserName == "") {
+    if (AddNewUser.name == "") {
       SetmsgeError("ใส่ชื่อด้วยครับ");
       Seterror(true);
-    } else if (AddNewUser.LastName == "") {
+    } else if (AddNewUser.lastname == "") {
       SetmsgeError("ใส่นามสกุลด้วยครับ");
       Seterror(true);
-    } else if (AddNewUser.PassWord == "") {
+    } else if (AddNewUser.password == "") {
       SetmsgeError("ใส่รหัสด้วยครับ");
       Seterror(true);
     } else if (AddNewUser.role == "") {
@@ -85,10 +71,10 @@ export default function Users() {
     } else {
       setUsers((prevNewUser) => [...prevNewUser, AddNewUser]);
       setAddNewUser({
-        UserName: "",
-        LastName: "",
+        name: "",
+        lastname: "",
         role: "",
-        PassWord: "",
+        password: "",
       });
       SetradioCheck("");
       Seterror(false);
@@ -98,19 +84,19 @@ export default function Users() {
   const handleInputFirstName = (e) => {
     setAddNewUser({
       ...AddNewUser,
-      UserName: e.target.value,
+      name: e.target.value,
     });
   };
   const handleInputLastname = (e) => {
     setAddNewUser({
       ...AddNewUser,
-      LastName: e.target.value,
+      lastname: e.target.value,
     });
   };
   const handleInputPassword = (e) => {
     setAddNewUser({
       ...AddNewUser,
-      PassWord: e.target.value,
+      password: e.target.value,
     });
   };
   const handleInputrole = (e) => {
@@ -134,10 +120,10 @@ export default function Users() {
         prev.map((item, i) => {
           if (i === index) {
             return {
-              UserName: NewUser.UserName,
-              LastName: NewUser.LastName,
+              name: NewUser.UserName,
+              lastname: NewUser.LastName,
               role: NewUser.role,
-              PassWord: NewUser.PassWord,
+              password: NewUser.PassWord,
             };
           }
           return item;

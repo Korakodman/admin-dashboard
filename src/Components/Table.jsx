@@ -49,10 +49,10 @@ function Table({ Users, DeleteOption, EditUser }) {
           {Users.map((user, index) => (
             <tr key={index} className="border-b border-gray-600">
               <td className="p-2 text-center">{index}</td>
-              <td className="p-2">{user.UserName}</td>
-              <td className="p-2">{user.LastName}</td>
+              <td className="p-2">{user.name}</td>
+              <td className="p-2">{user.lastname}</td>
               <td className="p-2">{user.role}</td>
-              <td className="p-2">{user.PassWord}</td>
+              <td className="p-2">{user.password}</td>
               <td className="p-2 text-center">
                 <button
                   className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-white"

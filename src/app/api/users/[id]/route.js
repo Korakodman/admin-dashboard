@@ -2,14 +2,13 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Users from "@/app/models/Users";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
-
 // DELETE function สำหรับลบ User ตาม id
 export async function DELETE(req, { params }) {
   await connectToDatabase();
 
   try {
     // ดึง id จาก params โดยไม่ต้อง await
-    const id = params.id;
+    const { id } = await params;
 
     // ตรวจสอบว่า id เป็น ObjectId ที่ถูกต้องหรือไม่
     if (!id || !ObjectId.isValid(id)) {
