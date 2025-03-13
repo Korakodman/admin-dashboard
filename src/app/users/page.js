@@ -6,7 +6,14 @@ import AddUserdialog from "@/Components/AddUserdialog";
 export default function Users() {
   const [error, Seterror] = useState(false);
   const [msgeEror, SetmsgeError] = useState();
-
+  const [radioCheck, SetradioCheck] = useState("");
+  const [AddNewUser, setAddNewUser] = useState({
+    id: 0,
+    name: "",
+    lastname: "",
+    role: "",
+    password: "",
+  });
   const [Users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -16,15 +23,9 @@ export default function Users() {
         .then((data) => setUsers(data))
         .catch((err) => console.log(err));
     } catch (error) {}
-  }, []);
+  }, [AddNewUser]);
   console.log(Users);
-  const [radioCheck, SetradioCheck] = useState("");
-  const [AddNewUser, setAddNewUser] = useState({
-    name: "",
-    lastname: "",
-    role: "",
-    password: "",
-  });
+
   const dialog = useRef();
   function OpenDialog() {
     if (dialog.current) {
@@ -53,7 +54,7 @@ export default function Users() {
       Closedialog();
     }
   };
-  const AddUser = (e) => {
+  async function AddUser(e) {
     e.preventDefault();
 
     if (AddNewUser.name == "") {
@@ -69,7 +70,13 @@ export default function Users() {
       SetmsgeError("ใส่ยศด้วยครับ");
       Seterror(true);
     } else {
-      setUsers((prevNewUser) => [...prevNewUser, AddNewUser]);
+      const newId = Users.length > 0 ? Users[Users.length - 1].id + 1 : 1;
+
+      const newUser = {
+        id: newId,
+        ...AddNewUser,
+      };
+      setUsers((prevNewUser) => [...prevNewUser, newUser]);
       setAddNewUser({
         name: "",
         lastname: "",
@@ -79,8 +86,15 @@ export default function Users() {
       SetradioCheck("");
       Seterror(false);
       Closedialog();
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      });
     }
-  };
+  }
   const handleInputFirstName = (e) => {
     setAddNewUser({
       ...AddNewUser,
@@ -107,11 +121,14 @@ export default function Users() {
     SetradioCheck(e.target.value);
   };
   // console.log(Users);
-  const DeleteOption = (id) => {
+  async function DeleteOption(id) {
+    setUsers((prev) => prev.filter((user) => user.id !== id));
     console.log(id);
-    setUsers((prev) => prev.filter((task, index) => index !== id));
-  };
-  const EditUser = (user, index) => {
+    const response = await fetch(`/api/users/${id}`, {
+      method: "DELETE",
+    });
+  }
+  async function EditUser(user, index) {
     if (!user) {
       return;
     } else {
@@ -120,17 +137,29 @@ export default function Users() {
         prev.map((item, i) => {
           if (i === index) {
             return {
-              name: NewUser.UserName,
-              lastname: NewUser.LastName,
+              name: NewUser.name,
+              lastname: NewUser.lastname,
               role: NewUser.role,
-              password: NewUser.PassWord,
+              password: NewUser.password,
             };
           }
           return item;
         })
       );
+      const response = await fetch(`/api/users/${NewUser.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: NewUser.name,
+          lastname: NewUser.lastname,
+          role: NewUser.role,
+          password: NewUser.password,
+        }),
+      });
     }
-  };
+  }
   return (
     <main className=" p-6 bg-gray-100 md:w-[1320px]">
       <div className="text-black font-serif flex">

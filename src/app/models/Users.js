@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
-  id: Number,
+  id: { type: Number, unique: true, required: true },
   name: String,
   lastname: String,
   role: String,
-  password: Number,
+  password: String,
 });
 
 const Users = mongoose.models.Users || mongoose.model("Users", UserSchema);

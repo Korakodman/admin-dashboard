@@ -25,7 +25,12 @@ const AddUserdialog = forwardRef(
           className="w-[400px] h-fit rounded-md p-4 border-black bg-gray-200 shadow-md"
           onClick={clickoutside} // ใช้ฟังก์ชันที่แก้ไขแล้ว
         >
-          <form className="p-4 rounded-md" onSubmit={(e) => AddUser(e)}>
+          <form
+            className="p-4 rounded-md"
+            onSubmit={(e) => AddUser(e)}
+            method="POST"
+            action={"http://localhost:3000/api/users"}
+          >
             <div className="grid p-2 mb-2">
               <div className="text-2xl mb-2 text-center">
                 <h1>Add User</h1>
