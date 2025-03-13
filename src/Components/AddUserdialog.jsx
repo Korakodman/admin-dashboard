@@ -9,10 +9,7 @@ const AddUserdialog = forwardRef(
       AddNewUser,
       msgeEror,
       error,
-      handleInputFirstName,
-      handleInputLastname,
-      handleInputPassword,
-      handleInputrole,
+      handleInputChange,
       radioCheck,
       AddUser,
     },
@@ -36,21 +33,24 @@ const AddUserdialog = forwardRef(
                 <h1>Add User</h1>
               </div>
               <input
+                name="name"
                 placeholder="FirstName"
-                onChange={(e) => handleInputFirstName(e)}
+                onChange={handleInputChange}
                 value={AddNewUser.name || ""}
                 className={style.UserInput}
               />
               <input
+                name="lastname"
                 placeholder="LastName"
-                onChange={(e) => handleInputLastname(e)}
+                onChange={handleInputChange}
                 value={AddNewUser.lastname || ""}
                 className={style.UserInput}
               />
               <input
+                name="password"
                 placeholder="Password"
                 type="password"
-                onChange={(e) => handleInputPassword(e)}
+                onChange={handleInputChange}
                 value={AddNewUser.password || ""}
                 className={style.UserInput}
               />
@@ -62,7 +62,7 @@ const AddUserdialog = forwardRef(
                   name="role"
                   className="mr-2"
                   checked={radioCheck === "Admin"}
-                  onChange={handleInputrole}
+                  onChange={handleInputChange}
                 />
                 <label htmlFor="Admin" className="mr-2">
                   Admin
@@ -73,7 +73,7 @@ const AddUserdialog = forwardRef(
                   value="User"
                   name="role"
                   className="mr-2"
-                  onChange={handleInputrole}
+                  onChange={handleInputChange}
                   checked={radioCheck === "User"}
                 />
                 <label htmlFor="User">User</label>

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import OptionDialog from "./OptionDialog";
 
-function Table({ Users, DeleteOption, EditUser }) {
+function Table({ Users, DeleteOption, EditUser, loading }) {
   const FormDialog = useRef();
   const [DialogOption, SetDialogOption] = useState();
   const [SelectUser, SetSelectUser] = useState([
@@ -57,7 +57,7 @@ function Table({ Users, DeleteOption, EditUser }) {
                 <button
                   className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-white"
                   onClick={() => {
-                    OpenDialog(user, index);
+                    OpenDialog(user, user.id);
                     SetDialogOption(false);
                   }}
                 >
@@ -66,7 +66,7 @@ function Table({ Users, DeleteOption, EditUser }) {
                 <button
                   className="bg-red-600 hover:bg-red-700 px-3 py-1 ml-2 rounded text-white"
                   onClick={() => {
-                    OpenDialog(user, index);
+                    OpenDialog(user, user.id);
                     SetDialogOption(true);
                   }}
                 >
@@ -77,6 +77,9 @@ function Table({ Users, DeleteOption, EditUser }) {
           ))}
         </tbody>
       </table>
+      <div className="text-center text-black mt-5 font-bold text-xl">
+        {loading ? "Loading..." : ""}
+      </div>
       <div>
         <OptionDialog
           ref={FormDialog}

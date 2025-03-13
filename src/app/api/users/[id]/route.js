@@ -39,11 +39,11 @@ export async function DELETE(req, { params }) {
 }
 
 export async function PUT(req, { params }) {
-  const id = await params;
   await connectToDatabase();
   try {
     const { name, lastname, role, password } = await req.json();
-    const users = await Users.findOne({ id: id });
+    const { id } = await params;
+    const users = await Users.findOne({ id: String(id) });
     users.name = name;
     users.lastname = lastname;
     users.role = role;
