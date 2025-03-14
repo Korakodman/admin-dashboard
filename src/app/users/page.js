@@ -129,7 +129,7 @@ export default function Users() {
     if (response.ok) {
       setUsers((prev) => prev.filter((user) => user.id !== id));
     } else {
-      console.error("Error deleting user");
+      console.error("Error deleting user something Wrong");
     }
   }
   // วิธีทำให้โค้ดสั้นคือ ส่งค่าที่จะอัพเดตมาเช่น updatedUser และ id คือ index จากนั้นให้เรียกใช้ ฟังชั้น setส่งค่าเก่า
