@@ -85,7 +85,7 @@ jobs:
     environment:
       name: github-pages
     env:  
-        MONGODB_URL: ${{ mongodb+srv://Admin:P21Tlmpsh2IYQhpR@cluster0.qrdm8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0 }}
+        MONGODB_URL: ${{ secrets.mongodb+srv://Admin:P21Tlmpsh2IYQhpR@cluster0.qrdm8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0 }} 
     runs-on: ubuntu-latest
     needs: build
     steps:
