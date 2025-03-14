@@ -1,6 +1,5 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import Users from "@/app/models/Users";
-import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 // DELETE function สำหรับลบ User ตาม id
 export async function DELETE(req, { params }) {

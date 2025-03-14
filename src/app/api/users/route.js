@@ -1,13 +1,11 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import Users from "@/app/models/Users";
-import Products from "@/app/models/Products";
-import { ObjectId } from "mongodb";
 
-import { NextResponse } from "next/server";
 // Users
 export async function GET(req) {
   await connectToDatabase();
   try {
+    // find all user
     const users = await Users.find({}).lean();
     users.forEach((user) => {
       user._id = user._id.toString();
