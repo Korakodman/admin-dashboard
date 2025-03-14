@@ -8,7 +8,10 @@ import { NextResponse } from "next/server";
 export async function GET(req) {
   await connectToDatabase();
   try {
-    const users = await Users.find({});
+    const users = await Users.find({}).lean();
+    users.forEach((user) => {
+      user._id = user._id.toString();
+    });
     return Response.json(users, { status: 200 });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
