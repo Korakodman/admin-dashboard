@@ -17,11 +17,11 @@ export default function Users() {
   });
   const [Users, setUsers] = useState([]);
   const [refresh, setRefresh] = useState(false);
-
+  const API_URL = process.env.API_URL;
   useEffect(() => {
     Setloading(true);
     try {
-      fetch("http://localhost:3000/api/users/")
+      fetch(`${API_URL}/api/users/`)
         .then((res) => res.json())
         .then((data) => setUsers(data))
         .then(() => Setloading(false));
@@ -105,7 +105,7 @@ export default function Users() {
       SetradioCheck("");
       Seterror(false);
       Closedialog();
-      const response = await fetch("/api/users", {
+      const response = await fetch(`${API_URL}/api/users/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -124,7 +124,9 @@ export default function Users() {
 
   // console.log(Users);
   async function DeleteOption(id) {
-    const response = await fetch(`/api/users/${id}`, { method: "DELETE" });
+    const response = await fetch(`${API_URL}/api/users/${id}`, {
+      method: "DELETE",
+    });
 
     if (response.ok) {
       setUsers((prev) => prev.filter((user) => user.id !== id));
@@ -141,7 +143,7 @@ export default function Users() {
       prev.map((user, i) => (i === index ? { ...user, ...updatedUser } : user))
     );
 
-    const response = await fetch(`/api/users/${updatedUser.id}`, {
+    const response = await fetch(`${API_URL}/api/users/${updatedUser.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedUser),
