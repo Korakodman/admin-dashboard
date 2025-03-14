@@ -5,11 +5,7 @@ import Users from "@/app/models/Users";
 export async function GET(req) {
   await connectToDatabase();
   try {
-    // find all user
-    const users = await Users.find({}).lean();
-    users.forEach((user) => {
-      user._id = user._id.toString();
-    });
+    const users = await Users.find({});
     return Response.json(users, { status: 200 });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

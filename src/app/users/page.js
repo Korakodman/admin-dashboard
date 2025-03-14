@@ -125,11 +125,13 @@ export default function Users() {
   // console.log(Users);
   function DeleteOption(id) {
     const response = fetch(`/api/users/${id}`, { method: "DELETE" });
-
-    if (response.ok) {
-      setUsers((prev) => prev.filter((user) => user.id !== id));
-    } else {
-      console.error("Error deleting user");
+    try {
+      if (response.ok) {
+        setUsers((prev) => prev.filter((user) => user.id !== id));
+        if (response.ok) setRefresh((prev) => !prev);
+      }
+    } catch (error) {
+      console.log("Error deleting user");
     }
   }
   // วิธีทำให้โค้ดสั้นคือ ส่งค่าที่จะอัพเดตมาเช่น updatedUser และ id คือ index จากนั้นให้เรียกใช้ ฟังชั้น setส่งค่าเก่า
