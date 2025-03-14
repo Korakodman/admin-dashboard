@@ -3,6 +3,8 @@ import Users from "@/app/models/Users";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 // DELETE function สำหรับลบ User ตาม id
+export const dynamic = "force-static";
+export const revalidate = 60;
 export async function DELETE(req, { params }) {
   await connectToDatabase();
 

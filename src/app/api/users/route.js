@@ -2,7 +2,8 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Users from "@/app/models/Users";
 import Products from "@/app/models/Products";
 import { ObjectId } from "mongodb";
-
+export const dynamic = "force-static";
+export const revalidate = 60;
 import { NextResponse } from "next/server";
 // Users
 export async function GET(req) {
