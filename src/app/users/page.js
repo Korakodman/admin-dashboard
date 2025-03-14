@@ -58,7 +58,7 @@ export default function Users() {
       Closedialog();
     }
   };
-  async function AddUser(e) {
+  function AddUser(e) {
     e.preventDefault();
 
     if (!AddNewUser.name.trim()) {
@@ -105,7 +105,7 @@ export default function Users() {
       SetradioCheck("");
       Seterror(false);
       Closedialog();
-      const response = await fetch("/api/users", {
+      const response = fetch("/api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -123,8 +123,8 @@ export default function Users() {
   };
 
   // console.log(Users);
-  async function DeleteOption(id) {
-    const response = await fetch(`/api/users/${id}`, { method: "DELETE" });
+  function DeleteOption(id) {
+    const response = fetch(`/api/users/${id}`, { method: "DELETE" });
 
     if (response.ok) {
       setUsers((prev) => prev.filter((user) => user.id !== id));
@@ -135,13 +135,13 @@ export default function Users() {
   // วิธีทำให้โค้ดสั้นคือ ส่งค่าที่จะอัพเดตมาเช่น updatedUser และ id คือ index จากนั้นให้เรียกใช้ ฟังชั้น setส่งค่าเก่า
   // prev มา map(user,i) เช็คว่า id ตรงกับ indexที่รับมามั้ย ถ้าตรง ให้ แทนที่ users อันเก่า แทนที่อันใหม่ updatedUser
   // ถ้าไม่ให้คงค่าเดิม user
-  async function EditUser(updatedUser, index) {
+  function EditUser(updatedUser, index) {
     if (!updatedUser) return;
     setUsers((prev) =>
       prev.map((user, i) => (i === index ? { ...user, ...updatedUser } : user))
     );
 
-    const response = await fetch(`/api/users/${updatedUser.id}`, {
+    const response = fetch(`/api/users/${updatedUser.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedUser),
