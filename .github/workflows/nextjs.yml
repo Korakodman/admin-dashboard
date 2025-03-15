@@ -7,7 +7,11 @@ name: Deploy Next.js site to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
+<<<<<<< HEAD
     branches: ["master"]
+=======
+    branches: ["fix"]
+>>>>>>> 6b4977509484f34450fbb0d5ef94d3a9d26933d6
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -29,7 +33,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+<<<<<<< HEAD
       MONGODB_URL: ${{ secrets.MONGODB_URL }} 
+=======
+         MONGODB_URI: ${{ secrets.MONGODB_URI }}
+>>>>>>> 6b4977509484f34450fbb0d5ef94d3a9d26933d6
     steps:
       - name: Checkout
         uses: actions/checkout@v4
