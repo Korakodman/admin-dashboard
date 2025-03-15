@@ -1,11 +1,12 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import Users from "@/app/models/Users";
-
+export const dynamic = "force-dynamic";
+import { NextResponse } from "next/server";
 // Users
 export async function GET(req) {
   await connectToDatabase();
   const users = await Users.find({});
-  return Response.json(users, { status: 200 });
+  return NextResponse.json(users, { status: 200 });
 }
 export async function POST(req) {
   await connectToDatabase();
@@ -23,5 +24,5 @@ export async function POST(req) {
     password,
   });
 
-  return Response.json(NewUser, { status: 201 });
+  return NextResponse.json(NewUser, { status: 201 });
 }
