@@ -1,16 +1,15 @@
-// app/users/page.js
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation"; // ✅ แก้ให้ใช้ next/navigation
 import Table from "../../Components/Table";
 import AddUserdialog from "@/Components/AddUserdialog";
+
 export default function Users() {
   const [error, Seterror] = useState(false);
-  const [msgeEror, SetmsgeError] = useState();
+  const [msgeEror, SetmsgeError] = useState("");
   const [radioCheck, SetradioCheck] = useState("");
   const [loading, Setloading] = useState(false);
   const [AddNewUser, setAddNewUser] = useState({
-    id: 0,
     name: "",
     lastname: "",
     role: "",
@@ -19,142 +18,145 @@ export default function Users() {
   const [Users, setUsers] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
+
   useEffect(() => {
-    Setloading(true);
-    try {
-      fetch(`${apiurl}/api/users/`)
-        .then((res) => res.json())
-        .then((data) => setUsers(data))
-        .then(() => Setloading(false));
-      console.log(apiurl);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [AddNewUser, refresh]);
+    const fetchUsers = async () => {
+      Setloading(true);
+      try {
+        const res = await fetch(`${apiurl}/api/users/`);
+        const data = await res.json();
+        setUsers(data);
+      } catch (error) {
+        console.log("Error fetching users:", error);
+      } finally {
+        Setloading(false);
+      }
+    };
+
+    fetchUsers();
+  }, [refresh]);
 
   const dialog = useRef();
   function OpenDialog() {
-    if (dialog.current) {
-      dialog.current.showModal();
-    }
+    dialog.current?.showModal();
   }
   function Closedialog() {
-    setAddNewUser({
-      name: "",
-      lastname: "",
-      role: "",
-      password: "",
-    });
+    setAddNewUser({ name: "", lastname: "", role: "", password: "" });
     SetradioCheck("");
-    dialog.current.close();
+    dialog.current?.close();
   }
+
   const clickoutside = (e) => {
     if (e.target === dialog.current) {
-      setAddNewUser({
-        name: "",
-        lastname: "",
-        role: "",
-        password: "",
-      });
-      SetradioCheck("");
       Closedialog();
     }
   };
+
   async function AddUser(e) {
     e.preventDefault();
 
     if (!AddNewUser.name.trim()) {
       SetmsgeError("ใส่ชื่อด้วยครับ");
       Seterror(true);
-    } else if (!/^[a-zA-Zก-๙]+$/.test(AddNewUser.name)) {
+      return;
+    }
+    if (!/^[a-zA-Zก-๙]+$/.test(AddNewUser.name)) {
       SetmsgeError("ชื่อห้ามมีตัวเลขหรืออักขระพิเศษครับ");
       Seterror(true);
-    } else if (!AddNewUser.lastname.trim()) {
+      return;
+    }
+    if (!AddNewUser.lastname.trim()) {
       SetmsgeError("ใส่นามสกุลด้วยครับ");
       Seterror(true);
-    } else if (!/^[a-zA-Zก-๙]+$/.test(AddNewUser.lastname)) {
+      return;
+    }
+    if (!/^[a-zA-Zก-๙]+$/.test(AddNewUser.lastname)) {
       SetmsgeError("นามสกุลห้ามมีตัวเลขหรืออักขระพิเศษครับ");
       Seterror(true);
-    } else if (!AddNewUser.password.trim()) {
+      return;
+    }
+    if (!AddNewUser.password.trim()) {
       SetmsgeError("ใส่รหัสด้วยครับ");
       Seterror(true);
-    } else if (AddNewUser.password.length < 6) {
+      return;
+    }
+    if (AddNewUser.password.length < 6) {
       SetmsgeError("รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร");
       Seterror(true);
-    } else if (!/[A-Z]/.test(AddNewUser.password)) {
+      return;
+    }
+    if (!/[A-Z]/.test(AddNewUser.password)) {
       SetmsgeError("รหัสผ่านต้องมีตัวพิมพ์ใหญ่");
       Seterror(true);
-    } else if (!/[0-9]/.test(AddNewUser.password)) {
+      return;
+    }
+    if (!/[0-9]/.test(AddNewUser.password)) {
       SetmsgeError("รหัสผ่านต้องมีตัวเลข");
       Seterror(true);
-    } else if (!AddNewUser.role) {
+      return;
+    }
+    if (!AddNewUser.role) {
       SetmsgeError("ใส่ยศด้วยครับ");
       Seterror(true);
-    } else {
-      const newId = Users.length > 0 ? Users[Users.length - 1].id + 1 : 1;
+      return;
+    }
 
-      const newUser = {
-        id: newId,
-        ...AddNewUser,
-      };
-      setUsers((prevNewUser) => [...prevNewUser, newUser]);
-      setAddNewUser({
-        name: "",
-        lastname: "",
-        role: "",
-        password: "",
-      });
-      SetradioCheck("");
-      Seterror(false);
-      Closedialog();
+    try {
       const response = await fetch(`${apiurl}/api/users/`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newUser),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(AddNewUser),
       });
+
+      if (response.ok) {
+        const newUser = await response.json();
+        setUsers((prev) => [...prev, newUser]);
+        Closedialog();
+        setRefresh((prev) => !prev);
+      }
+    } catch (error) {
+      console.error("Error adding user:", error);
     }
   }
-  // วิธีทำให้เพิ่มผู้ใช้สั้นลง คือรับ event มาแล้ว destuctoring{name,value} ซึ่ง name ต้องกำหนดมาจากใน
-  // input เช่น name:"name" lastname:"lastname" ต่อๆกันไป หลังจากนั้น มันจะแทนที่ค่าเก่าตาม name และค่าที่รับมาเป็น value
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setAddNewUser((prev) => ({ ...prev, [name]: value }));
     if (name === "role") SetradioCheck(value);
   };
 
-  // console.log(Users);
   async function DeleteOption(id) {
-    const response = await fetch(`${apiurl}/api/users/${id}`, {
-      method: "DELETE",
-    });
-
-    if (response.ok) {
-      setUsers((prev) => prev.filter((user) => user.id !== id));
-    } else {
-      console.error("Error deleting user something Wrong");
+    try {
+      const response = await fetch(`${apiurl}/api/users/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        setUsers((prev) => prev.filter((user) => user._id !== id));
+        setRefresh((prev) => !prev);
+      } else {
+        console.error("Error deleting user");
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
     }
   }
-  // วิธีทำให้โค้ดสั้นคือ ส่งค่าที่จะอัพเดตมาเช่น updatedUser และ id คือ index จากนั้นให้เรียกใช้ ฟังชั้น setส่งค่าเก่า
-  // prev มา map(user,i) เช็คว่า id ตรงกับ indexที่รับมามั้ย ถ้าตรง ให้ แทนที่ users อันเก่า แทนที่อันใหม่ updatedUser
-  // ถ้าไม่ให้คงค่าเดิม user
-  async function EditUser(updatedUser, index) {
-    if (!updatedUser) return;
-    setUsers((prev) =>
-      prev.map((user, i) => (i === index ? { ...user, ...updatedUser } : user))
-    );
 
-    const response = await fetch(`${apiurl}/api/users/${updatedUser.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedUser),
-    });
+  async function EditUser(updatedUser) {
+    try {
+      const response = await fetch(`${apiurl}/api/users/${updatedUser._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedUser),
+      });
 
-    if (response.ok) setRefresh((prev) => !prev);
+      if (response.ok) {
+        setRefresh((prev) => !prev);
+      }
+    } catch (error) {
+      console.error("Edit error:", error);
+    }
   }
-  // วิธีทำให้ส่งฟังชั้นหรือ state ข้าม componet สั้นลง คือสร้าง object เก็บไว้แล้วส่งไปที่เดียวโดยใส่ {...userFormProps}
-  //  ... คือการ spread operator
+
   const userFormProps = {
     Closedialog,
     clickoutside,
@@ -165,19 +167,19 @@ export default function Users() {
     handleInputChange,
     radioCheck,
   };
+
   return (
-    <main className=" p-6 bg-gray-100 md:w-[1320px]">
+    <main className="p-6 bg-gray-100 md:w-[1320px]">
       <div className="text-black font-serif flex">
-        <h1 className="md:text-3xl font-bold ">จัดการบัญชีผู้ใช้งาน</h1>
+        <h1 className="md:text-3xl font-bold">จัดการบัญชีผู้ใช้งาน</h1>
         <button
           className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-white ml-4"
-          onClick={() => OpenDialog()}
+          onClick={OpenDialog}
         >
           Add User
         </button>
       </div>
       <AddUserdialog ref={dialog} {...userFormProps} />
-
       <Table
         Users={Users}
         DeleteOption={DeleteOption}

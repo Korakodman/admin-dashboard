@@ -3,35 +3,46 @@ import OptionDialog from "./OptionDialog";
 
 function Table({ Users, DeleteOption, EditUser, loading }) {
   const FormDialog = useRef();
-  const [DialogOption, SetDialogOption] = useState();
-  const [SelectUser, SetSelectUser] = useState([
-    { UserName: "", LastName: "", role: "", PassWord: "" },
-  ]);
+  const [DialogOption, SetDialogOption] = useState(false);
+  const [SelectUser, SetSelectUser] = useState({
+    UserName: "",
+    LastName: "",
+    role: "",
+    PassWord: "",
+  });
   const [SelectIndexID, SetSelectIndexID] = useState(null);
 
-  const OpenDialog = (user, index) => {
-    FormDialog.current.showModal();
-    SetSelectUser(user);
-    SetSelectIndexID(index);
+  const OpenDialog = (user, id) => {
+    FormDialog.current?.showModal();
+    SetSelectUser({
+      UserName: user.name,
+      LastName: user.lastname,
+      role: user.role,
+      PassWord: user.password,
+    });
+    SetSelectIndexID(id);
   };
+
   const CloseDialog = () => {
-    FormDialog.current.close();
+    FormDialog.current?.close();
   };
+
   const clickoutside = (e) => {
     if (e.target === FormDialog.current) {
-      CloseDialog(SelectIndexID);
+      CloseDialog();
     }
   };
+
   const FormOption = (e) => {
     e.preventDefault();
     if (DialogOption) {
       DeleteOption(SelectIndexID);
-      CloseDialog();
     } else {
       EditUser(SelectUser, SelectIndexID);
-      CloseDialog();
     }
+    CloseDialog();
   };
+
   return (
     <div className="p-4 font-serif">
       <table className="min-w-full bg-gray-800 text-white border border-gray-600">
@@ -40,7 +51,7 @@ function Table({ Users, DeleteOption, EditUser, loading }) {
             <th className="p-2">ID</th>
             <th className="p-2">Name</th>
             <th className="p-2">LastName</th>
-            <th className="p-2">role</th>
+            <th className="p-2">Role</th>
             <th className="p-2">Password</th>
             <th className="p-2">Action</th>
           </tr>
@@ -57,7 +68,7 @@ function Table({ Users, DeleteOption, EditUser, loading }) {
                 <button
                   className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-white"
                   onClick={() => {
-                    OpenDialog(user, user.id);
+                    OpenDialog(user, user._id);
                     SetDialogOption(false);
                   }}
                 >
@@ -66,7 +77,7 @@ function Table({ Users, DeleteOption, EditUser, loading }) {
                 <button
                   className="bg-red-600 hover:bg-red-700 px-3 py-1 ml-2 rounded text-white"
                   onClick={() => {
-                    OpenDialog(user, user.id);
+                    OpenDialog(user, user._id);
                     SetDialogOption(true);
                   }}
                 >
@@ -78,21 +89,18 @@ function Table({ Users, DeleteOption, EditUser, loading }) {
         </tbody>
       </table>
       <div className="text-center text-black mt-5 font-bold text-xl">
-        {loading ? "Loading..." : ""}
+        {loading && "Loading..."}
       </div>
-      <div>
-        <OptionDialog
-          ref={FormDialog}
-          DialogOption={DialogOption}
-          SelectUser={SelectUser}
-          SelectIndexID={SelectIndexID}
-          OpenDialog={OpenDialog}
-          CloseDialog={CloseDialog}
-          clickoutside={clickoutside}
-          FormOption={FormOption}
-          SetSelectUser={SetSelectUser}
-        />
-      </div>
+      <OptionDialog
+        ref={FormDialog}
+        DialogOption={DialogOption}
+        SelectUser={SelectUser}
+        SelectIndexID={SelectIndexID}
+        CloseDialog={CloseDialog}
+        clickoutside={clickoutside}
+        FormOption={FormOption}
+        SetSelectUser={SetSelectUser}
+      />
     </div>
   );
 }

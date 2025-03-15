@@ -9,7 +9,19 @@ export async function GET(req) {
 }
 export async function POST(req) {
   await connectToDatabase();
-  const { id, name, lastname, role, password } = await req.json();
-  const NewUser = await Users.create({ id, name, lastname, role, password });
+  const { name, lastname, role, password } = await req.json();
+
+  // หา id สูงสุดและเพิ่มค่าใหม่
+  const lastUser = await Users.findOne().sort({ id: -1 });
+  const newId = lastUser ? lastUser.id + 1 : 1;
+
+  const NewUser = await Users.create({
+    id: newId,
+    name,
+    lastname,
+    role,
+    password,
+  });
+
   return Response.json(NewUser, { status: 201 });
 }
