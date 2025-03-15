@@ -1,16 +1,20 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import Users from "@/app/models/Users";
 import { NextResponse } from "next/server";
-// DELETE function สำหรับลบ User ตาม id
 
+// DELETE function สำหรับลบ User ตาม id
 export async function DELETE(req, { params }) {
   await connectToDatabase();
   try {
-    // ดึง id จาก params โดยไม่ต้อง await
-    const { id } = await params;
+    // ✅ ดึง id จาก params
+    const { id } = params; // ไม่ต้องใช้ await
 
-    // ลบ user ออกจากฐานข้อมูล
-    await Users.deleteOne({ id: id });
+    // ✅ ใช้ _id ใน MongoDB ต้องใช้ `new ObjectId(id)`
+    const deletedUser = await Users.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
 
     return NextResponse.json({ message: "User Deleted Successfully" });
   } catch (error) {
@@ -22,20 +26,30 @@ export async function DELETE(req, { params }) {
   }
 }
 
+// PUT function สำหรับอัปเดต User ตาม id
 export async function PUT(req, { params }) {
   await connectToDatabase();
   try {
     const { name, lastname, role, password } = await req.json();
-    const { id } = await params;
-    const users = await Users.findOne({ id: String(id) });
-    users.name = name;
-    users.lastname = lastname;
-    users.role = role;
-    users.password = password;
-    await users.save();
-    return NextResponse.json({ message: "Update Successfully" } || users);
+    const { id } = params;
+
+    // ✅ ใช้ `findByIdAndUpdate` แทน `findOne` และ `save`
+    const updatedUser = await Users.findByIdAndUpdate(
+      id,
+      { name, lastname, role, password },
+      { new: true } // คืนค่าที่อัปเดตแล้ว
+    );
+
+    if (!updatedUser) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      message: "Update Successfully",
+      user: updatedUser,
+    });
   } catch (error) {
-    console.log("Error update User", error);
+    console.error("Error updating User:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
