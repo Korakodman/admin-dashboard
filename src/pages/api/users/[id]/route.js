@@ -1,7 +1,6 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import Users from "@/app/models/Users";
 import { NextResponse } from "next/server";
-export const dynamic = "force-dynamic";
 // DELETE function สำหรับลบ User ตาม id
 export async function DELETE(req, { params }) {
   await connectToDatabase();
