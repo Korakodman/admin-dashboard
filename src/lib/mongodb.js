@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const dburl = process.env.MONGODB_URI;
 let cached = global.mongoose;
-if (!MONGODB_URI) {
+if (!dburl) {
   throw new Error("please insert your mongodb url");
 }
 if (!global.mongoose) {
@@ -16,9 +16,7 @@ export async function connectToDatabase() {
     return cached.conn;
   }
   if (!cached.promise) {
-    cached.promise = mongoose
-      .connect(MONGODB_URI, {})
-      .then((mongoose) => mongoose);
+    cached.promise = mongoose.connect(dburl, {}).then((mongoose) => mongoose);
   }
   cached.conn = await cached.promise;
   return cached.conn;
