@@ -2,7 +2,14 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Users from "@/app/models/Users";
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb"; // ✅ นำเข้า ObjectId
-
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*", // หรือใส่ URL ที่ต้องการอนุญาต
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+export async function OPTIONS() {
+  return NextResponse.json({}, { status: 200, headers: corsHeaders });
+}
 // DELETE function สำหรับลบ User ตาม _id
 export async function DELETE(req, context) {
   await connectToDatabase();
@@ -20,7 +27,11 @@ export async function DELETE(req, context) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ message: "User Deleted Successfully" });
+    return NextResponse.json({
+      message: "User Deleted Successfully",
+      status: 200,
+      headers: corsHeaders,
+    });
   } catch (error) {
     console.error("Error deleting user:", error);
     return NextResponse.json(
@@ -55,6 +66,7 @@ export async function PUT(req, { params }) {
     return NextResponse.json({
       message: "Update Successfully",
       user: updatedUser, // ส่งข้อมูลผู้ใช้ที่อัปเดตกลับ
+      headers: corsHeaders,
     });
   } catch (error) {
     console.error("Error updating User:", error);
