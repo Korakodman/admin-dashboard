@@ -5,22 +5,23 @@ function Table({ Users, DeleteOption, EditUser, loading }) {
   const FormDialog = useRef();
   const [DialogOption, SetDialogOption] = useState(false);
   const [SelectUser, SetSelectUser] = useState({
-    UserName: "",
-    LastName: "",
+    name: "",
+    lastname: "",
     role: "",
-    PassWord: "",
+    password: "",
   });
   const [SelectIndexID, SetSelectIndexID] = useState(null);
 
-  const OpenDialog = (user, id) => {
+  const OpenDialog = (user, _id) => {
     FormDialog.current?.showModal();
     SetSelectUser({
-      UserName: user.name,
-      LastName: user.lastname,
+      name: user.name,
+      lastname: user.lastname,
       role: user.role,
-      PassWord: user.password,
+      password: user.password,
     });
-    SetSelectIndexID(id);
+    SetSelectIndexID(_id);
+    console.log(_id);
   };
 
   const CloseDialog = () => {
