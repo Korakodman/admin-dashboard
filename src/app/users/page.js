@@ -16,13 +16,13 @@ export default function Users() {
   });
   const [Users, setUsers] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const apiurl = process.env.NEXT_PUBLIC_API_URL + "/users";
 
   useEffect(() => {
     const fetchData = async () => {
       Setloading(true); // ✅ เริ่มโหลด
       try {
-        const res = await fetch(`${apiurl}/api/users`);
+        const res = await fetch(apiurl);
         const data = await res.json();
         setUsers(data);
       } catch (error) {
@@ -111,7 +111,7 @@ export default function Users() {
     }
 
     try {
-      const response = await fetch(`${apiurl}/api/users`, {
+      const response = await fetch(apiurl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(AddNewUser),
@@ -137,7 +137,7 @@ export default function Users() {
   async function DeleteOption(_id) {
     Setloading(true); // ✅ เริ่มโหลด
     try {
-      const response = await fetch(`${apiurl}/api/users/${_id}`, {
+      const response = await fetch(`${apiurl}/${_id}`, {
         method: "DELETE",
       });
 
@@ -157,7 +157,7 @@ export default function Users() {
     Setloading(true); // ✅ เริ่มโหลด
 
     try {
-      const response = await fetch(`${apiurl}/api/users/${_id}`, {
+      const response = await fetch(`${apiurl}/${_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedUser),
