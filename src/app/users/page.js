@@ -198,7 +198,7 @@ export default function Users() {
           onClick={OpenDialog}
           disabled={loading} // ✅ ปิดปุ่มเมื่อกำลังโหลด
         >
-          {loading ? "Loading..." : "Add User"}
+          {loading ? "Loading...." : "Add User"}
         </button>
       </div>
       <AddUserdialog ref={dialog} {...userFormProps} />
