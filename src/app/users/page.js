@@ -22,7 +22,7 @@ export default function Users() {
     const fetchData = async () => {
       Setloading(true); // ✅ เริ่มโหลด
       try {
-        const res = await fetch(`${apiurl}/api/users`);
+        const res = await fetch(`${apiurl}api/users`);
         const data = await res.json();
         setUsers(data);
       } catch (error) {
@@ -85,24 +85,24 @@ export default function Users() {
       Setloading(false);
       return;
     }
-    if (AddNewUser.password.length < 6) {
-      SetmsgeError("รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร");
-      Seterror(true);
-      Setloading(false);
-      return;
-    }
-    if (!/[A-Z]/.test(AddNewUser.password)) {
-      SetmsgeError("รหัสผ่านต้องมีตัวพิมพ์ใหญ่");
-      Seterror(true);
-      Setloading(false);
-      return;
-    }
-    if (!/[0-9]/.test(AddNewUser.password)) {
-      SetmsgeError("รหัสผ่านต้องมีตัวเลข");
-      Seterror(true);
-      Setloading(false);
-      return;
-    }
+    // if (AddNewUser.password.length < 6) {
+    //   SetmsgeError("รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร");
+    //   Seterror(true);
+    //   Setloading(false);
+    //   return;
+    // }
+    // if (!/[A-Z]/.test(AddNewUser.password)) {
+    //   SetmsgeError("รหัสผ่านต้องมีตัวพิมพ์ใหญ่");
+    //   Seterror(true);
+    //   Setloading(false);
+    //   return;
+    // }
+    // if (!/[0-9]/.test(AddNewUser.password)) {
+    //   SetmsgeError("รหัสผ่านต้องมีตัวเลข");
+    //   Seterror(true);
+    //   Setloading(false);
+    //   return;
+    // }
     if (!AddNewUser.role) {
       SetmsgeError("ใส่ยศด้วยครับ");
       Seterror(true);
@@ -111,7 +111,7 @@ export default function Users() {
     }
 
     try {
-      const response = await fetch(`${apiurl}/api/users`, {
+      const response = await fetch(`${apiurl}api/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(AddNewUser),
