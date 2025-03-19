@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import Table from "../../Components/Table";
 import AddUserdialog from "@/Components/AddUserdialog";
-import "@/styles/globals.css";
 export default function Users() {
   const [error, Seterror] = useState(false);
   const [msgeEror, SetmsgeError] = useState("");
