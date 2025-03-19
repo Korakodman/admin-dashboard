@@ -13,12 +13,9 @@ export async function GET() {
   await connectToDatabase();
   try {
     const users = await Users.find({});
-    return NextResponse.json(users, { status: 200 });
+    return NextResponse.json(users, { status: 200, headers: corsHeaders });
   } catch (error) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500, headers: corsHeaders }
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
