@@ -1,6 +1,7 @@
 import React from "react";
 import { forwardRef } from "react";
 import style from "./AddUserdialog.module.css";
+import "./";
 const apiurl = process.env.NEXT_PUBLIC_API_URL;
 const AddUserdialog = forwardRef(
   (

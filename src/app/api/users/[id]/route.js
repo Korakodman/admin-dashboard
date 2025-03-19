@@ -66,13 +66,13 @@ export async function PUT(req, { params }) {
     return NextResponse.json({
       message: "Update Successfully",
       user: updatedUser, // ส่งข้อมูลผู้ใช้ที่อัปเดตกลับ
-      // headers: corsHeaders,
+      headers: corsHeaders,
     });
   } catch (error) {
     console.error("Error updating User:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500, headers: corsHeaders }
+      { status: 500 }
     );
   }
 }

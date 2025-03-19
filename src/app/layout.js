@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import MySidebar from "@/Components/Sidebar";
-import "./globals.css";
+import "@./styles/globals.css";
 export default function Layout({ children }) {
   return (
     <html lang="en">
