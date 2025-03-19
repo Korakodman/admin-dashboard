@@ -10,7 +10,6 @@ export default function Home() {
         <div className="bg-white shadow-md p-4 rounded-lg">Card 1</div>
         <div className="bg-white shadow-md p-4 rounded-lg">Card 2</div>
         <div className="bg-white shadow-md p-4 rounded-lg">Card 3</div>
-        <div className="bg-red-500 text-white">Hello World</div>
       </section>
     </main>
   );

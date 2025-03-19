@@ -2,15 +2,19 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Users from "@/app/models/Users";
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb"; // ✅ นำเข้า ObjectId
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*", // หรือใส่ URL ที่ต้องการอนุญาต
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
+
+// OPTIONS method
 export async function OPTIONS() {
   return NextResponse.json({}, { status: 200, headers: corsHeaders });
 }
-// DELETE function สำหรับลบ User ตาม _id
+
+// DELETE method
 export async function DELETE(req, context) {
   await connectToDatabase();
   try {
@@ -18,13 +22,19 @@ export async function DELETE(req, context) {
     const id = await params.id;
 
     if (!ObjectId.isValid(id)) {
-      return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Invalid ID" },
+        { status: 400, headers: corsHeaders }
+      );
     }
 
     const deletedUser = await Users.findByIdAndDelete(new ObjectId(id));
 
     if (!deletedUser) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "User not found" },
+        { status: 404, headers: corsHeaders }
+      );
     }
 
     return NextResponse.json({
@@ -36,11 +46,12 @@ export async function DELETE(req, context) {
     console.error("Error deleting user:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
 
+// PUT method
 export async function PUT(req, { params }) {
   await connectToDatabase();
   try {
@@ -49,7 +60,10 @@ export async function PUT(req, { params }) {
 
     if (!ObjectId.isValid(_id)) {
       // ตรวจสอบว่า id เป็นรูปแบบที่ถูกต้องของ ObjectId หรือไม่
-      return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Invalid ID" },
+        { status: 400, headers: corsHeaders }
+      );
     }
 
     const updatedUser = await Users.findByIdAndUpdate(
@@ -60,19 +74,22 @@ export async function PUT(req, { params }) {
 
     if (!updatedUser) {
       // ถ้าไม่พบผู้ใช้
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "User not found" },
+        { status: 404, headers: corsHeaders }
+      );
     }
 
     return NextResponse.json({
       message: "Update Successfully",
-      user: updatedUser, // ส่งข้อมูลผู้ใช้ที่อัปเดตกลับ
+      user: updatedUser,
       headers: corsHeaders,
     });
   } catch (error) {
     console.error("Error updating User:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }

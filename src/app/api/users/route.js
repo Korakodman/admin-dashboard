@@ -15,7 +15,10 @@ export async function GET() {
     const users = await Users.find({});
     return NextResponse.json(users, { status: 200, headers: corsHeaders });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: error.message },
+      { status: 500, headers: corsHeaders }
+    );
   }
 }
 
@@ -32,6 +35,9 @@ export async function POST(req) {
     await newUser.save();
     return NextResponse.json(newUser, { status: 201, headers: corsHeaders });
   } catch (error) {
-    return NextResponse.json({ status: 400 }, console.log(error)); // ✅ แก้ไข error handling
+    return NextResponse.json(
+      { status: 400, headers: corsHeaders },
+      console.log(error)
+    ); // ✅ แก้ไข error handling
   }
 }
