@@ -1,9 +1,12 @@
-import React from "react";
+"use client";
+import React, { useContext } from "react";
 import Link from "next/link";
 import { FaHome, FaUser } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
+import { AuthContext } from "../app/Context/UseContextHook";
 
 function MySidebar() {
+  const { Islogin, SetIslogin } = useContext(AuthContext);
   const SidebarItem = ({ href, icon, text }) => {
     return (
       <Link
@@ -14,15 +17,31 @@ function MySidebar() {
       </Link>
     );
   };
+  const UserInterface = ({ name, role }) => {
+    return (
+      <div className="p-2 grid end font-bold mt-80 border border-white rounded-lg bg-gray-700 text-lg">
+        <div className="flex items-center gap-2">
+          <FaUser /> Name: {name}
+        </div>
+        <button
+          className="text-black bg-red-300 p-2 hover:bg-red-500 rounded-md "
+          onClick={() => SetIslogin(false)}
+        >
+          Logout
+        </button>
+      </div>
+    );
+  };
   return (
-    <aside>
-      <div className="h-screen md:w-64 bg-gray-900 text-white flex flex-col p-4">
+    <aside className="h-screen md:w-64 bg-gray-900 text-white grid justify-between ">
+      <div className="flex flex-col p-4">
         {/* โลโก้ */}
         <h2 className="md:text-xl font-bold mb-6">Admin Dashboard</h2>
 
         {/* เมนู */}
         <nav className="flex flex-col gap-4">
           <SidebarItem href="/" icon={<FaHome />} text="Dashboard" />
+          <SidebarItem href="/dashboard" icon={<FaHome />} text="Dashboard" />
           <SidebarItem href="/users" icon={<FaUser />} text="Users" />
           <SidebarItem
             href="/settings"
@@ -30,6 +49,9 @@ function MySidebar() {
             text="Settings"
           />
         </nav>
+      </div>
+      <div className="px-4">
+        {Islogin && <UserInterface name="Korakod" role="Admin" />}
       </div>
     </aside>
   );
