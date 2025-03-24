@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import style from "./page.module.css";
 import { AuthContext } from "./Context/UseContextHook";
 import LoginUI from "@/Components/LoginUI";
@@ -15,7 +15,16 @@ export default function Home() {
       password: "1234",
     },
   ]);
+
+  useEffect(() => {
+    const LoginStatus = localStorage.getItem("Islogin");
+    if (LoginStatus == "true") {
+      SetIslogin(true);
+    }
+  }, []);
+
   const [SelectUserLogin, SetSelectUserLogin] = useState([{}]);
+
   const ReisterPage = () => {
     if (Isregister) {
       Setregister(false);
@@ -30,7 +39,7 @@ export default function Home() {
   };
 
   const UserFormProps = { DataBaseUser, SetDataBaseUser, handleInputChange };
-
+  const loginStatus = localStorage.getItem("isLogin");
   const formSubmit = (e) => {
     e.preventDefault();
     try {
@@ -40,10 +49,12 @@ export default function Home() {
           user.password === SelectUserLogin.password
       );
       if (FindUser) {
+        localStorage.setItem("isLogin", "true");
         SetIslogin(true);
         router.push("/users");
       } else {
-        console.log("เข้าไม่ได้");
+        alert("เข้าไม่ได้");
+        router.push("/");
       }
     } catch (error) {
       console.log(error, "Something Error");
@@ -66,7 +77,6 @@ export default function Home() {
             <div className=" flex justify-end ">
               <button
                 type="submit"
-                onClick={() => SetIslogin(true)}
                 className="w-full  text-white font-bold py-2 px-4 bg-gradient-to-br from-fuchsia-600 to-cyan-500 p-2  mt-4"
               >
                 {Isregister ? "Login" : "Register"}

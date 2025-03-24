@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Table from "../../Components/Table";
 import AddUserdialog from "@/Components/AddUserdialog";
+import { useRouter } from "next/navigation";
 export default function Users() {
   const [error, Seterror] = useState(false);
   const [msgeEror, SetmsgeError] = useState("");
@@ -16,8 +17,16 @@ export default function Users() {
   const [Users, setUsers] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
-
+  const Route = useRouter();
   useEffect(() => {
+    const loginStatus = localStorage.getItem("isLogin");
+    if (loginStatus === "true") {
+      Route.push("/users");
+    } else {
+      alert("กรุณาเข้าระบบ");
+      Route.push("/");
+    }
+
     const fetchData = async () => {
       Setloading(true); // ✅ เริ่มโหลด
       try {

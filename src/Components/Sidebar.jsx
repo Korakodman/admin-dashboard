@@ -4,9 +4,10 @@ import Link from "next/link";
 import { FaHome, FaUser } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { AuthContext } from "../app/Context/UseContextHook";
-
+import { useRouter } from "next/navigation";
 function MySidebar() {
   const { Islogin, SetIslogin } = useContext(AuthContext);
+  const route = useRouter();
   const SidebarItem = ({ href, icon, text }) => {
     return (
       <Link
@@ -25,7 +26,11 @@ function MySidebar() {
         </div>
         <button
           className="text-black bg-red-300 p-2 hover:bg-red-500 rounded-md "
-          onClick={() => SetIslogin(false)}
+          onClick={() => {
+            localStorage.removeItem("isLogin");
+            SetIslogin(false);
+            route.push("/");
+          }}
         >
           Logout
         </button>
@@ -40,7 +45,12 @@ function MySidebar() {
 
         {/* เมนู */}
         <nav className="flex flex-col gap-4">
-          <SidebarItem href="/" icon={<FaHome />} text="Dashboard" />
+          {Islogin ? (
+            ""
+          ) : (
+            <SidebarItem href="/" icon={<FaHome />} text="Dashboard" />
+          )}
+
           <SidebarItem href="/dashboard" icon={<FaHome />} text="Dashboard" />
           <SidebarItem href="/users" icon={<FaUser />} text="Users" />
           <SidebarItem
