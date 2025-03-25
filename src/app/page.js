@@ -24,7 +24,7 @@ export default function Home() {
   }, []);
 
   const [SelectUserLogin, SetSelectUserLogin] = useState([{}]);
-
+  const [NewUser, SetNewUser] = useState([{}]);
   const ReisterPage = () => {
     if (Isregister) {
       Setregister(false);
@@ -37,27 +37,53 @@ export default function Home() {
     const { name, value } = e.target;
     SetSelectUserLogin((prev) => ({ ...prev, [name]: value }));
   };
+  const handleInputRegisChange = (e) => {
+    const { name, value } = e.target;
+    SetNewUser((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const UserFormProps = { DataBaseUser, SetDataBaseUser, handleInputChange };
   const loginStatus = localStorage.getItem("isLogin");
+  const users = JSON.parse(localStorage.getItem("users")) || [];
   const formSubmit = (e) => {
     e.preventDefault();
-    try {
-      const FindUser = DataBaseUser.find(
-        (user) =>
-          user.username === SelectUserLogin.username &&
-          user.password === SelectUserLogin.password
-      );
-      if (FindUser) {
-        localStorage.setItem("isLogin", "true");
-        SetIslogin(true);
-        router.push("/users");
-      } else {
-        alert("เข้าไม่ได้");
-        router.push("/");
+    if (!Isregister) {
+      try {
+        const FindUser = DataBaseUser.find(
+          (user) =>
+            user.username === SelectUserLogin.username &&
+            user.password === SelectUserLogin.password
+        );
+        if (FindUser) {
+          localStorage.setItem("isLogin", "true");
+          SetIslogin(true);
+          router.push("/users");
+        } else {
+          alert("เข้าไม่ได้");
+          router.push("/");
+        }
+      } catch (error) {
+        console.log(error, "Something Error");
       }
-    } catch (error) {
-      console.log(error, "Something Error");
+    } else {
+      try {
+        const Isexits = users.some(
+          (user) => user.username === NewUser.username
+        );
+        const Checkpass = NewUser.password != NewUser.secondpass;
+        if (Isexits) {
+          alert("มีผู้ใช้ซ้ำ");
+          return;
+        }
+        if (Checkpass) {
+          alert("รหัสผ่านไม่ตรงกัน");
+          return;
+        }
+        users.push(NewUser);
+        localStorage.setItem("users", JSON.stringify(users));
+        alert("Register Successfully!!");
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
   return (
@@ -70,10 +96,14 @@ export default function Home() {
           >
             <div className="grid justify-center items-center h-auto">
               <h1 className="md:text-3xl font-bold text-black p-2">
-                {Isregister ? "Login Page" : "Register Page"}
+                {Isregister ? "Register Page" : "Login Page"}
               </h1>
             </div>
-            {Isregister ? <LoginUI {...UserFormProps} /> : <RegisterUI />}
+            {Isregister ? (
+              <RegisterUI handleInputRegisChange={handleInputRegisChange} />
+            ) : (
+              <LoginUI handleInputChange={handleInputChange} />
+            )}
             <div className=" flex justify-end ">
               <button
                 type="submit"
@@ -84,14 +114,14 @@ export default function Home() {
             </div>
             <div className=" text-black mt-4 font-bold md:text-lg text-center">
               {Isregister
-                ? " Don't Have an Account? "
-                : "Already Have an Account? "}
+                ? "Already Have an Account? "
+                : " Don't Have an Account? "}
               <button
                 type="button"
                 className="text-blue-600"
                 onClick={ReisterPage}
               >
-                {Isregister ? "Sign Up" : "Login"}
+                {Isregister ? "Login" : "Sign Up"}
               </button>
             </div>
           </form>
