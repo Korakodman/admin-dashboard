@@ -6,29 +6,55 @@ import LoginUI from "@/Components/LoginUI";
 import RegisterUI from "@/Components/RegisterUI";
 import { useRouter } from "next/navigation";
 export default function Home() {
-  const { Islogin, SetIslogin, Isregister, Setregister } =
-    useContext(AuthContext);
+  const {
+    Islogin,
+    SetIslogin,
+    Isregister,
+    Setregister,
+    DataBaseUser,
+    SetDataBaseUser,
+    currentUser,
+    SetcurrentUser,
+    SelectUserLogin,
+    SetSelectUserLogin,
+  } = useContext(AuthContext);
   const router = useRouter();
-  const [DataBaseUser, SetDataBaseUser] = useState([
-    {
-      username: "Ice",
-      password: "1234",
-    },
-  ]);
+  const [error, seterror] = useState();
 
+  const [loadingdata, Setloadingdata] = useState();
+  const apiurl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
-    const LoginStatus = localStorage.getItem("Islogin");
-    if (LoginStatus == "true") {
+    Setloadingdata(true);
+    async function FetchApi() {
+      try {
+        const res = await fetch(`${apiurl}api/users`);
+        const data = await res.json();
+        SetDataBaseUser(data);
+        Setloadingdata(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    FetchApi();
+
+    const loginStatus = localStorage.getItem("islogin");
+    const savedUser = localStorage.getItem("currentUser");
+    if (loginStatus === "true" && savedUser) {
       SetIslogin(true);
+      SetcurrentUser(JSON.parse(savedUser));
+      router.push("/users");
+    } else {
+      router.push("/");
     }
   }, []);
 
-  const [SelectUserLogin, SetSelectUserLogin] = useState([{}]);
   const [NewUser, SetNewUser] = useState([{}]);
   const ReisterPage = () => {
     if (Isregister) {
+      seterror("");
       Setregister(false);
     } else {
+      seterror("");
       Setregister(true);
     }
   };
@@ -42,9 +68,9 @@ export default function Home() {
     SetNewUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const loginStatus = localStorage.getItem("isLogin");
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  const formSubmit = (e) => {
+  const loginStatus = localStorage.getItem("islogin");
+
+  async function formSubmit(e) {
     e.preventDefault();
     if (!Isregister) {
       try {
@@ -54,11 +80,14 @@ export default function Home() {
             user.password === SelectUserLogin.password
         );
         if (FindUser) {
-          localStorage.setItem("isLogin", "true");
+          localStorage.setItem("islogin", "true");
+          localStorage.setItem("currentUser", JSON.stringify(FindUser));
           SetIslogin(true);
+          SetcurrentUser(FindUser);
           router.push("/users");
+          seterror("");
         } else {
-          alert("เข้าไม่ได้");
+          seterror("ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูก");
           router.push("/");
         }
       } catch (error) {
@@ -66,26 +95,41 @@ export default function Home() {
       }
     } else {
       try {
-        const Isexits = users.some(
+        const formData = new FormData(e.target);
+        const username = formData.get("username");
+        const lastname = formData.get("lastname");
+        const password = formData.get("password");
+        const secondpass = formData.get("secondpass");
+
+        const Isexits = DataBaseUser.some(
           (user) => user.username === NewUser.username
         );
-        const Checkpass = NewUser.password != NewUser.secondpass;
+
         if (Isexits) {
-          alert("มีผู้ใช้ซ้ำ");
+          seterror("มีผู้ใช้ซ้ำ");
           return;
         }
-        if (Checkpass) {
-          alert("รหัสผ่านไม่ตรงกัน");
-          return;
+        if (!username) return seterror("ใส่ชื่อด้วย");
+        if (!lastname) return seterror("ใส่นามสกุลด้วย");
+        if (!password) return seterror("ใส่รหัสด้วย");
+        if (!secondpass) return seterror("ใส่รหัสยืนยันด้วย");
+        const newUser = { username, lastname, password, role: "User" };
+        const response = await fetch(`${apiurl}api/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newUser),
+        });
+        if (response.ok) {
+          alert("Register Successfully!!");
+          router.push("/dashboard");
+          SetIslogin(true);
+          console.log(newUser);
         }
-        users.push(NewUser);
-        localStorage.setItem("users", JSON.stringify(users));
-        alert("Register Successfully!!");
       } catch (error) {
         console.error(error);
       }
     }
-  };
+  }
   return (
     <main className="bg-gray-100 md:h-screen md:w-screen">
       <section className="grid justify-center bg-gradient-to-br from-fuchsia-600 to-cyan-500 md:h-screen ">
@@ -100,16 +144,20 @@ export default function Home() {
               </h1>
             </div>
             {Isregister ? (
-              <RegisterUI handleInputRegisChange={handleInputRegisChange} />
+              <RegisterUI
+                handleInputRegisChange={handleInputRegisChange}
+                error={error}
+              />
             ) : (
-              <LoginUI handleInputChange={handleInputChange} />
+              <LoginUI handleInputChange={handleInputChange} error={error} />
             )}
+            <div className=" text-red-500 ">{error}</div>
             <div className=" flex justify-end ">
               <button
                 type="submit"
                 className="w-full  text-white font-bold py-2 px-4 bg-gradient-to-br from-fuchsia-600 to-cyan-500 p-2  mt-4"
               >
-                {Isregister ? "Login" : "Register"}
+                {Isregister ? "Register" : "Login"}
               </button>
             </div>
             <div className=" text-black mt-4 font-bold md:text-lg text-center">

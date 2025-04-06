@@ -1,12 +1,12 @@
 import React from "react";
 import style from "./LoginAndRegister.module.css";
-export default function RegisterUI({ handleInputRegisChange }) {
+export default function RegisterUI({ handleInputRegisChange, error }) {
   return (
     <div className="grid">
       <div className="text-black font-bold text-1xl mb-4">
         <input
           placeholder="Username"
-          className={style.inputuser}
+          className={error ? style.error : style.inputuser}
           type="text"
           name="username"
           onChange={handleInputRegisChange}
@@ -15,7 +15,7 @@ export default function RegisterUI({ handleInputRegisChange }) {
       <div className="text-black font-bold text-1xl mb-4">
         <input
           placeholder="Lastname"
-          className={style.inputuser}
+          className={error ? style.error : style.inputuser}
           type="text"
           name="lastname"
           onChange={handleInputRegisChange}
@@ -24,7 +24,7 @@ export default function RegisterUI({ handleInputRegisChange }) {
       <div className="text-black font-bold text-1xl mb-4">
         <input
           placeholder="Password"
-          className={style.inputuser}
+          className={error ? style.error : style.inputuser}
           type="password"
           name="password"
           onChange={handleInputRegisChange}
@@ -33,7 +33,7 @@ export default function RegisterUI({ handleInputRegisChange }) {
       <div className="text-black font-bold text-1xl mb-4">
         <input
           placeholder="Repeat Password"
-          className={style.inputuser}
+          className={error ? style.error : style.inputuser}
           type="password"
           name="secondpass"
           onChange={handleInputRegisChange}

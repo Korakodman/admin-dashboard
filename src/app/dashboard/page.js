@@ -1,15 +1,28 @@
 "use client";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import { AuthContext } from "../Context/UseContextHook";
+
 const Dashboard = () => {
-  const Route = useRouter();
+  const {
+    Islogin,
+    SetIslogin,
+    DataBaseUser,
+    currentUser,
+    SetcurrentUser,
+    SelectUserLogin,
+  } = useContext(AuthContext);
+  const router = useRouter();
   useEffect(() => {
-    const loginStatus = localStorage.getItem("isLogin");
-    if (loginStatus === "true") {
-      Route.push("/dashboard");
+    const loginStatus = localStorage.getItem("islogin");
+    const savedUser = localStorage.getItem("currentUser");
+    if (loginStatus === "true" && savedUser) {
+      SetIslogin(true);
+      SetcurrentUser(JSON.parse(savedUser));
+      router.push("/users");
     } else {
-      alert("กรุณาเข้าระบบ");
-      Route.push("/");
+      router.push("/");
     }
   }, []);
   return (

@@ -8,15 +8,15 @@ import { useRouter } from "next/navigation";
 export default function Settings() {
   const [user, setuser] = useState([]);
   const Route = useRouter();
-  useEffect(() => {
-    const loginStatus = localStorage.getItem("isLogin");
-    if (loginStatus === "true") {
-      Route.push("/settings");
-    } else {
-      alert("กรุณาเข้าระบบ");
-      Route.push("/");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const loginStatus = localStorage.getItem("isLogin");
+  //   if (loginStatus === "true") {
+  //     Route.push("/settings");
+  //   } else {
+  //     alert("กรุณาเข้าระบบ");
+  //     Route.push("/");
+  //   }
+  // }, []);
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Settings Management</h1>

@@ -17,7 +17,7 @@ const OptionDialog = forwardRef(
     const handleName = (e) => {
       SetSelectUser({
         ...SelectUser,
-        name: e.target.value,
+        username: e.target.value,
       });
     };
     const handleLast = (e) => {
@@ -56,7 +56,7 @@ const OptionDialog = forwardRef(
                 <input
                   className={style.EditUser}
                   placeholder="ชื่อผู้ใช้"
-                  value={SelectUser.name || ""}
+                  value={SelectUser.username || ""}
                   onChange={(e) => handleName(e)}
                 ></input>
                 <input

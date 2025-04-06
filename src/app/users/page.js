@@ -3,32 +3,44 @@ import { useEffect, useRef, useState } from "react";
 import Table from "../../Components/Table";
 import AddUserdialog from "@/Components/AddUserdialog";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import { AuthContext } from "../Context/UseContextHook";
 export default function Users() {
   const [error, Seterror] = useState(false);
   const [msgeEror, SetmsgeError] = useState("");
   const [radioCheck, SetradioCheck] = useState("");
   const [loading, Setloading] = useState(false);
   const [AddNewUser, setAddNewUser] = useState({
-    name: "",
+    username: "",
     lastname: "",
     role: "",
     password: "",
   });
+  const {
+    Islogin,
+    SetIslogin,
+    DataBaseUser,
+    currentUser,
+    SetcurrentUser,
+    SelectUserLogin,
+  } = useContext(AuthContext);
+  const router = useRouter();
   const [Users, setUsers] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const Route = useRouter();
   useEffect(() => {
-    const loginStatus = localStorage.getItem("isLogin");
-    if (loginStatus === "true") {
-      Route.push("/users");
+    const loginStatus = localStorage.getItem("islogin");
+    const savedUser = localStorage.getItem("currentUser");
+    if (loginStatus === "true" && savedUser) {
+      SetIslogin(true);
+      SetcurrentUser(JSON.parse(savedUser));
+      router.push("/users");
     } else {
-      alert("กรุณาเข้าระบบ");
-      Route.push("/");
+      router.push("/");
     }
-
     const fetchData = async () => {
-      Setloading(true); // ✅ เริ่มโหลด
+      Setloading(true);
       try {
         const res = await fetch(`${apiurl}api/users`);
         const data = await res.json();
@@ -37,7 +49,7 @@ export default function Users() {
         console.log("Error fetching users:", error);
         SetmsgeError("Error fetching users");
       } finally {
-        Setloading(false); // ✅ โหลดเสร็จ
+        Setloading(false);
       }
     };
     fetchData();
@@ -48,7 +60,7 @@ export default function Users() {
     dialog.current?.showModal();
   }
   function Closedialog() {
-    setAddNewUser({ name: "", lastname: "", role: "", password: "" });
+    setAddNewUser({ username: "", lastname: "", role: "", password: "" });
     SetradioCheck("");
     dialog.current?.close();
   }
@@ -63,13 +75,13 @@ export default function Users() {
     e.preventDefault();
     Setloading(true); // ✅ เริ่มโหลด
 
-    if (!AddNewUser.name.trim()) {
+    if (!AddNewUser.username.trim()) {
       SetmsgeError("ใส่ชื่อด้วยครับ");
       Seterror(true);
       Setloading(false);
       return;
     }
-    if (!/^[a-zA-Zก-๙]+$/.test(AddNewUser.name)) {
+    if (!/^[a-zA-Zก-๙]+$/.test(AddNewUser.username)) {
       SetmsgeError("ชื่อห้ามมีตัวเลขหรืออักขระพิเศษครับ");
       Seterror(true);
       Setloading(false);

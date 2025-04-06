@@ -16,7 +16,7 @@ export default function Layout({ children }) {
   );
 }
 const Content = ({ children }) => {
-  const { Islogin } = useContext(AuthContext);
+  const { Islogin, DataBaseUser } = useContext(AuthContext);
 
   return (
     <div className="flex">

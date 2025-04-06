@@ -5,7 +5,7 @@ function Table({ Users, DeleteOption, EditUser, loading }) {
   const FormDialog = useRef();
   const [DialogOption, SetDialogOption] = useState(false);
   const [SelectUser, SetSelectUser] = useState({
-    name: "",
+    username: "",
     lastname: "",
     role: "",
     password: "",
@@ -15,13 +15,12 @@ function Table({ Users, DeleteOption, EditUser, loading }) {
   const OpenDialog = (user, _id) => {
     FormDialog.current?.showModal();
     SetSelectUser({
-      name: user.name,
+      username: user.username,
       lastname: user.lastname,
       role: user.role,
       password: user.password,
     });
     SetSelectIndexID(_id);
-    console.log(_id);
   };
 
   const CloseDialog = () => {
@@ -61,7 +60,7 @@ function Table({ Users, DeleteOption, EditUser, loading }) {
           {Users.map((user, index) => (
             <tr key={index} className="border-b border-gray-600">
               <td className="p-2 text-center">{index}</td>
-              <td className="p-2">{user.name}</td>
+              <td className="p-2">{user.username}</td>
               <td className="p-2">{user.lastname}</td>
               <td className="p-2">{user.role}</td>
               <td className="p-2">{user.password}</td>

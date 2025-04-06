@@ -34,10 +34,10 @@ const AddUserdialog = forwardRef(
                 <h1>Add User</h1>
               </div>
               <input
-                name="name"
+                name="username"
                 placeholder="FirstName"
                 onChange={handleInputChange}
-                value={AddNewUser.name || ""}
+                value={AddNewUser.username || ""}
                 className={style.UserInput}
               />
               <input

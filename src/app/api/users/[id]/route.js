@@ -56,7 +56,7 @@ export async function PUT(req, { params }) {
   await connectToDatabase();
   try {
     const _id = params.id; // รับ id จาก params
-    const { name, lastname, role, password } = await req.json(); // รับข้อมูลใหม่จาก body ของ request
+    const { username, lastname, role, password } = await req.json(); // รับข้อมูลใหม่จาก body ของ request
 
     if (!ObjectId.isValid(_id)) {
       // ตรวจสอบว่า id เป็นรูปแบบที่ถูกต้องของ ObjectId หรือไม่
@@ -68,7 +68,7 @@ export async function PUT(req, { params }) {
 
     const updatedUser = await Users.findByIdAndUpdate(
       new ObjectId(_id), // แปลง id จาก string เป็น ObjectId
-      { name, lastname, role, password }, // ข้อมูลที่ต้องการอัปเดต
+      { username, lastname, role, password }, // ข้อมูลที่ต้องการอัปเดต
       { new: true } // ส่งค่าใหม่หลังจากการอัปเดต
     );
 
