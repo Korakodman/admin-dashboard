@@ -210,7 +210,7 @@ export default function Users() {
   };
 
   return (
-    <main className="p-6 bg-gray-100 md:w-[1600px] ">
+    <main className="p-6 bg-gray-100 md:w-[1600px] h-screen ">
       <div className="text-black font-serif flex">
         <h1 className="md:text-3xl font-bold">จัดการบัญชีผู้ใช้งาน</h1>
         <button

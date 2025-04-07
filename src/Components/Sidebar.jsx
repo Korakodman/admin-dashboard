@@ -62,7 +62,7 @@ function MySidebar() {
         </nav>
       </div>
       {Islogin && currentUser && (
-        <div className="p-2 grid font-bold  border h-28 mt-[500px]  text-[12px]  border-white rounded-lg bg-gray-700 md:text-lg">
+        <div className="p-2 grid font-bold  border h-28 mt-[350px]  text-[12px]  border-white rounded-lg bg-gray-700 md:text-lg">
           <div className="flex items-center gap-2">
             <FaUser /> Name: <span>{currentUser.username}</span>
           </div>
