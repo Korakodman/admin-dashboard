@@ -121,10 +121,15 @@ export default function Home() {
           body: JSON.stringify(newUser),
         });
         if (response.ok) {
-          alert("Register Successfully!!");
-          router.push("/dashboard");
-          SetIslogin(true);
-          console.log(newUser);
+          if (typeof window !== "undefined") {
+            const loginStatus = localStorage.getItem("islogin");
+            localStorage.setItem("islogin", "true");
+            localStorage.setItem("currentUser", JSON.stringify(newUser));
+            alert("Register Successfully!!");
+            SetcurrentUser(newUser);
+            SetIslogin(true);
+            router.push("/users");
+          }
         }
       } catch (error) {
         console.error(error);
