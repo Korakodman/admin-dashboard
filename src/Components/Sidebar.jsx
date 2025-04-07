@@ -67,11 +67,13 @@ function MySidebar() {
           <button
             className="text-black bg-red-300 p-2 hover:bg-red-500 rounded-md "
             onClick={() => {
-              localStorage.removeItem("islogin");
-              localStorage.removeItem("currentUser");
-              SetIslogin(false);
-              SetcurrentUser(null);
-              route.push("/");
+              if (typeof window !== "undefined") {
+                localStorage.removeItem("islogin");
+                localStorage.removeItem("currentUser");
+                SetIslogin(false);
+                SetcurrentUser(null);
+                route.push("/");
+              }
             }}
           >
             Logout
