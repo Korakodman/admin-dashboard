@@ -20,7 +20,6 @@ const Dashboard = () => {
     if (loginStatus === "true" && savedUser) {
       SetIslogin(true);
       SetcurrentUser(JSON.parse(savedUser));
-      router.push("/users");
     } else {
       router.push("/");
     }

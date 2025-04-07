@@ -137,11 +137,11 @@ export default function Home() {
     }
   }
   return (
-    <main className="bg-gray-100 md:h-screen md:w-screen">
-      <section className="grid justify-center bg-gradient-to-br from-fuchsia-600 to-cyan-500 md:h-screen ">
+    <main className="bg-gray-100 h-screen md:w-screen w-full ">
+      <section className="grid justify-center bg-gradient-to-br from-fuchsia-600 to-cyan-500 h-screen  ">
         <div className="mt-36">
           <form
-            className="border border-white p-6 rounded-md bg-white w-[400px] "
+            className="border border-white p-6 rounded-md bg-white md:w-[400px] w-[325px]"
             onSubmit={(e) => formSubmit(e)}
           >
             <div className="grid justify-center items-center h-auto">
@@ -161,7 +161,7 @@ export default function Home() {
             <div className=" flex justify-end ">
               <button
                 type="submit"
-                className="w-full  text-white font-bold py-2 px-4 bg-gradient-to-br from-fuchsia-600 to-cyan-500 p-2  mt-4"
+                className="w-full  text-white font-bold md:py-2 md:px-4 p-1 bg-gradient-to-br from-fuchsia-600 to-cyan-500   mt-4"
               >
                 {Isregister ? "Register" : "Login"}
               </button>

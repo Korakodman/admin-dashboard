@@ -37,10 +37,12 @@ function MySidebar() {
   };
 
   return (
-    <aside className="h-screen md:w-64 bg-gray-900 text-white grid justify-between ">
+    <aside className="h-screen md:w-64 w-44 bg-gray-900 text-white grid justify-between ">
       <div className="flex flex-col p-4">
         {/* โลโก้ */}
-        <h2 className="md:text-xl font-bold mb-6">Admin Dashboard</h2>
+        <h2 className="md:text-xl text-[12px] font-bold mb-6">
+          Admin Dashboard
+        </h2>
 
         {/* เมนู */}
         <nav className="flex flex-col gap-4">
@@ -60,12 +62,12 @@ function MySidebar() {
         </nav>
       </div>
       {Islogin && currentUser && (
-        <div className="p-2 grid end font-bold mt-80 border border-white rounded-lg bg-gray-700 text-lg">
+        <div className="p-2 grid font-bold  border h-28 mt-[500px]  text-[12px]  border-white rounded-lg bg-gray-700 md:text-lg">
           <div className="flex items-center gap-2">
             <FaUser /> Name: <span>{currentUser.username}</span>
           </div>
           <button
-            className="text-black bg-red-300 p-2 hover:bg-red-500 rounded-md "
+            className="text-black bg-red-300 md:p-2 hover:bg-red-500 rounded-md  "
             onClick={() => {
               if (typeof window !== "undefined") {
                 localStorage.removeItem("islogin");

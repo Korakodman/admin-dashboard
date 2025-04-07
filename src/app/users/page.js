@@ -210,11 +210,11 @@ export default function Users() {
   };
 
   return (
-    <main className="p-6 bg-gray-100 md:w-[1320px]">
+    <main className="p-6 bg-gray-100 md:w-[1600px] ">
       <div className="text-black font-serif flex">
         <h1 className="md:text-3xl font-bold">จัดการบัญชีผู้ใช้งาน</h1>
         <button
-          className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-white ml-4"
+          className="bg-blue-600 hover:bg-blue-700 md:px-3 md:py-1 px-1 md:text-xl text-sm rounded text-white ml-4"
           onClick={OpenDialog}
           disabled={loading} // ✅ ปิดปุ่มเมื่อกำลังโหลด
         >
