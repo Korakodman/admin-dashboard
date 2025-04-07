@@ -68,8 +68,6 @@ export default function Home() {
     SetNewUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const loginStatus = localStorage.getItem("islogin");
-
   async function formSubmit(e) {
     e.preventDefault();
     if (!Isregister) {
@@ -80,12 +78,15 @@ export default function Home() {
             user.password === SelectUserLogin.password
         );
         if (FindUser) {
-          localStorage.setItem("islogin", "true");
-          localStorage.setItem("currentUser", JSON.stringify(FindUser));
-          SetIslogin(true);
-          SetcurrentUser(FindUser);
-          router.push("/users");
-          seterror("");
+          if (typeof window !== "undefined") {
+            const loginStatus = localStorage.getItem("islogin");
+            localStorage.setItem("islogin", "true");
+            localStorage.setItem("currentUser", JSON.stringify(FindUser));
+            SetIslogin(true);
+            SetcurrentUser(FindUser);
+            router.push("/users");
+            seterror("");
+          }
         } else {
           seterror("ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูก");
           router.push("/");
