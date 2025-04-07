@@ -27,7 +27,7 @@ export default function Home() {
     Setloadingdata(true);
     async function FetchApi() {
       try {
-        const res = await fetch(`${apiurl}api/users`);
+        const res = await fetch(`${apiurl}/api/users`);
         const data = await res.json();
         SetDataBaseUser(data);
         Setloadingdata(false);
@@ -115,7 +115,7 @@ export default function Home() {
         if (!password) return seterror("ใส่รหัสด้วย");
         if (!secondpass) return seterror("ใส่รหัสยืนยันด้วย");
         const newUser = { username, lastname, password, role: "User" };
-        const response = await fetch(`${apiurl}api/register`, {
+        const response = await fetch(`${apiurl}/api/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newUser),
