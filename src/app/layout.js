@@ -6,7 +6,7 @@ import { useContext, useState } from "react";
 import { AuthProvider, AuthContext } from "./Context/UseContextHook";
 export default function Layout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" class="dark">
       <body>
         <AuthProvider>
           <Content>{children}</Content>
