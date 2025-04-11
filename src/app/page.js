@@ -24,18 +24,18 @@ export default function Home() {
   const [loadingdata, Setloadingdata] = useState();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
-    Setloadingdata(true);
-    async function FetchApi() {
-      try {
-        const res = await fetch(`${apiurl}/api/users`);
-        const data = await res.json();
-        SetDataBaseUser(data);
-        Setloadingdata(false);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    FetchApi();
+    // Setloadingdata(true);
+    // async function FetchApi() {
+    //   try {
+    //     const res = await fetch(`${apiurl}/api/users`);
+    //     const data = await res.json();
+    //     SetDataBaseUser(data);
+    //     Setloadingdata(false);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+    // FetchApi();
 
     const loginStatus = localStorage.getItem("islogin");
     const savedUser = localStorage.getItem("currentUser");
@@ -72,19 +72,39 @@ export default function Home() {
     e.preventDefault();
     if (!Isregister) {
       try {
-        const FindUser = DataBaseUser.find(
-          (user) =>
-            user.username === SelectUserLogin.username &&
-            user.password === SelectUserLogin.password
-        );
-        if (FindUser) {
+        const response = await fetch(`${apiurl}/api/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: SelectUserLogin.username,
+            password: SelectUserLogin.password,
+          }),
+        });
+
+        // เช็คว่า response เป็น OK ก่อน
+        if (!response.ok) {
+          seterror("ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูก");
+          router.push("/");
+          return;
+        }
+
+        // ตรวจสอบว่า response เป็น JSON
+        const data = await response.json();
+
+        // ตรวจสอบผลจาก API
+        if (data) {
           if (typeof window !== "undefined") {
             const loginStatus = localStorage.getItem("islogin");
             localStorage.setItem("islogin", "true");
-            localStorage.setItem("currentUser", JSON.stringify(FindUser));
+            localStorage.setItem(
+              "currentUser",
+              JSON.stringify(SelectUserLogin)
+            );
             SetIslogin(true);
-            SetcurrentUser(FindUser);
-            router.push("/users");
+            SetcurrentUser(SelectUserLogin);
+            router.push("/dashboard");
             seterror("");
           }
         } else {
@@ -93,6 +113,7 @@ export default function Home() {
         }
       } catch (error) {
         console.log(error, "Something Error");
+        seterror("เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
       }
     } else {
       try {

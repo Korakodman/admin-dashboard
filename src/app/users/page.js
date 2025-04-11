@@ -30,15 +30,15 @@ export default function Users() {
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const Route = useRouter();
   useEffect(() => {
-    const loginStatus = localStorage.getItem("islogin");
-    const savedUser = localStorage.getItem("currentUser");
-    if (loginStatus === "true" && savedUser) {
-      SetIslogin(true);
-      SetcurrentUser(JSON.parse(savedUser));
-      router.push("/users");
-    } else {
-      router.push("/");
-    }
+    // const loginStatus = localStorage.getItem("islogin");
+    // const savedUser = localStorage.getItem("currentUser");
+    // if (loginStatus === "true" && savedUser) {
+    //   SetIslogin(true);
+    //   SetcurrentUser(JSON.parse(savedUser));
+    //   router.push("/users");
+    // } else {
+    //   router.push("/");
+    // }
     const fetchData = async () => {
       Setloading(true);
       try {
