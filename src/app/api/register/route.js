@@ -31,7 +31,17 @@ export async function POST(req) {
     const newId = lastUser ? lastUser.id + 1 : 1; //
     const newUser = new Users({ ...body, id: newId });
     await newUser.save();
-    return NextResponse.json(newUser, { status: 201, headers: corsHeaders });
+    const res = NextResponse.json(newUser, {
+      status: 201,
+      headers: corsHeaders,
+    });
+    res.cookies.set("token", "mock-login-token", {
+      httpOnly: true,
+      secure: true,
+      path: "/",
+      maxAge: 60 * 60,
+    });
+    return res;
   } catch (error) {
     return NextResponse.json(
       {

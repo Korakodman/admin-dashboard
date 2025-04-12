@@ -68,12 +68,14 @@ function MySidebar() {
           </div>
           <button
             className="text-black bg-red-300 md:p-2 hover:bg-red-500 rounded-md  "
-            onClick={() => {
+            onClick={async () => {
               if (typeof window !== "undefined") {
                 localStorage.removeItem("islogin");
                 localStorage.removeItem("currentUser");
                 SetIslogin(false);
                 SetcurrentUser(null);
+                await fetch(`${apiurl}/api/logout`, { method: "GET" });
+
                 route.push("/");
               }
             }}
