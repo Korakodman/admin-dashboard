@@ -26,11 +26,18 @@ export async function POST(req) {
   await connectToDatabase();
   try {
     const body = await req.json();
-    console.log("Received Data:", body);
+    const exitingUser = await Users.findOne({ username: body.username });
+    if (exitingUser) {
+      return NextResponse.json(
+        { message: "User already have" },
+        { status: 400 }
+      );
+    }
     const lastUser = await Users.findOne().sort({ id: -1 });
     const newId = lastUser ? lastUser.id + 1 : 1; //
     const newUser = new Users({ ...body, id: newId });
     await newUser.save();
+
     const res = NextResponse.json(newUser, {
       status: 201,
       headers: corsHeaders,

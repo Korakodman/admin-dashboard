@@ -20,7 +20,7 @@ export default function Home() {
   } = useContext(AuthContext);
   const router = useRouter();
   const [error, seterror] = useState();
-
+  const [succes, setsucces] = useState();
   const [loadingdata, Setloadingdata] = useState();
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
@@ -141,6 +141,7 @@ export default function Home() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newUser),
         });
+        const result = response.json();
         if (response.ok) {
           if (typeof window !== "undefined") {
             const loginStatus = localStorage.getItem("islogin");
@@ -151,6 +152,10 @@ export default function Home() {
             SetIslogin(true);
             router.push("/users");
           }
+        } else if (!response.ok) {
+          seterror("มีชื่อผู้ใช้ซ้ำ");
+        } else {
+          setsucces("สมัครสมาชิกสำเร็จ");
         }
       } catch (error) {
         console.error(error);
@@ -179,6 +184,7 @@ export default function Home() {
               <LoginUI handleInputChange={handleInputChange} error={error} />
             )}
             <div className=" text-red-500 ">{error}</div>
+            <div className=" text-green-500">{succes}</div>
             <div className=" flex justify-end ">
               <button
                 type="submit"
