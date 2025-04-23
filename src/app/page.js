@@ -7,8 +7,8 @@ import RegisterUI from "@/Components/RegisterUI";
 import { useRouter } from "next/navigation";
 export default function Home() {
   const {
-    Islogin,
-    SetIslogin,
+    isLoggedIn,
+    SetisLoggedIn,
     Isregister,
     Setregister,
     DataBaseUser,
@@ -37,14 +37,16 @@ export default function Home() {
     // }
     // FetchApi();
 
-    const loginStatus = localStorage.getItem("islogin");
-    const savedUser = localStorage.getItem("currentUser");
-    if (loginStatus === "true" && savedUser) {
-      SetIslogin(true);
-      SetcurrentUser(JSON.parse(savedUser));
-      router.push("/users");
-    } else {
-      router.push("/");
+    if (typeof window !== "undefined") {
+      const loginStatus = localStorage.getItem("islogin");
+      const savedUser = localStorage.getItem("currentUser");
+      if (loginStatus === "true" && savedUser) {
+        SetisLoggedIn(true);
+        SetcurrentUser(JSON.parse(savedUser));
+        router.push("/dashboard");
+      } else {
+        router.push("/");
+      }
     }
   }, []);
 
@@ -102,7 +104,7 @@ export default function Home() {
               "currentUser",
               JSON.stringify(SelectUserLogin)
             );
-            SetIslogin(true);
+            SetisLoggedIn(true);
             SetcurrentUser(SelectUserLogin);
             router.push("/dashboard");
             seterror("");
@@ -149,7 +151,7 @@ export default function Home() {
             localStorage.setItem("currentUser", JSON.stringify(newUser));
             alert("Register Successfully!!");
             SetcurrentUser(newUser);
-            SetIslogin(true);
+            SetisLoggedIn(true);
             router.push("/users");
           }
         } else if (!response.ok) {

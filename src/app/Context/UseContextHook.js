@@ -1,11 +1,11 @@
 // /app/Context/UseContextHook.js
 "use client";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [Islogin, SetIslogin] = useState(false);
+  const [isLoggedIn, SetisLoggedIn] = useState(false);
   const [Isregister, Setregister] = useState(false);
   const [DataBaseUser, SetDataBaseUser] = useState([]);
   const [currentUser, SetcurrentUser] = useState(null);
@@ -14,11 +14,22 @@ export const AuthProvider = ({ children }) => {
     password: "",
   });
 
+  useEffect(() => {
+    const stored = localStorage.getItem("isLoggedIn");
+    const currentuser = localStorage.getItem("currentUser");
+    if (stored === "true") {
+      SetisLoggedIn(true);
+      SetcurrentUser(currentuser);
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("isLoggedIn", isLoggedIn);
+  }, [isLoggedIn]);
   return (
     <AuthContext.Provider
       value={{
-        Islogin,
-        SetIslogin,
+        isLoggedIn,
+        SetisLoggedIn,
         Isregister,
         Setregister,
         DataBaseUser,

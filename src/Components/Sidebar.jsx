@@ -1,14 +1,16 @@
 "use client";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { FaHome, FaUser } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
+import { RxHamburgerMenu } from "react-icons/rx";
+
 import { AuthContext } from "../app/Context/UseContextHook";
 import { useRouter } from "next/navigation";
 function MySidebar() {
   const {
-    Islogin,
-    SetIslogin,
+    isLoggedIn,
+    SetisLoggedIn,
     DataBaseUser,
     currentUser,
     SetcurrentUser,
@@ -18,12 +20,13 @@ function MySidebar() {
   const route = useRouter();
 
   useEffect(() => {
-    if (currentUser) {
-      console.log("คุณคือ:", currentUser.username);
-    } else {
-      console.log("คุณคือใคร");
+    if (!currentUser) {
+      const savedUser = localStorage.getItem("currentUser");
+      if (savedUser) {
+        SetcurrentUser(JSON.parse(savedUser));
+      }
     }
-  }, [currentUser]);
+  }, []);
 
   const SidebarItem = ({ href, icon, text }) => {
     return (
@@ -36,17 +39,30 @@ function MySidebar() {
     );
   };
 
+  const [open, Setopen] = useState(true);
+
   return (
-    <aside className="h-screen md:w-64 w-44 bg-gray-900 text-white grid justify-between ">
+    <aside
+      className={
+        open
+          ? "h-screen md:w-64 w-44 bg-gray-900 text-white grid justify-between "
+          : "h-screen md:w-0 w-0 bg-gray-900 text-white grid justify-between"
+      }
+    >
       <div className="flex flex-col p-4">
         {/* โลโก้ */}
-        <h2 className="md:text-xl text-[12px] font-bold mb-6">
+        <RxHamburgerMenu
+          className=" w-[35px] h-[40px] hover:cursor-pointer"
+          onClick={() => Setopen(false)}
+        />
+
+        <h2 className="md:text-xl text-[12px] font-bold mb-6 mt-2">
           Admin Dashboard
         </h2>
 
         {/* เมนู */}
         <nav className="flex flex-col gap-4">
-          {Islogin ? (
+          {isLoggedIn ? (
             ""
           ) : (
             <SidebarItem href="/" icon={<FaHome />} text="Dashboard" />
@@ -61,27 +77,39 @@ function MySidebar() {
           />
         </nav>
       </div>
-      {Islogin && currentUser && (
-        <div className="p-2 grid font-bold  border h-28 mt-[350px] md:ml-3 text-[12px]  border-white rounded-lg bg-gray-700 md:text-lg">
+      {isLoggedIn && currentUser && (
+        <div
+          className={`p-2 grid font-bold border h-28 mt-auto md:ml-3 text-[12px] border-white rounded-lg bg-gray-700 md:text-lg ${
+            open ? "" : "hidden"
+          }`}
+        >
           <div className="flex items-center gap-2">
             <FaUser /> User: <span>{currentUser.username}</span>
           </div>
           <button
-            className="text-black bg-red-300 md:p-2 hover:bg-red-500 rounded-md  "
+            className="text-black bg-red-300 md:p-2 hover:bg-red-500 rounded-md"
             onClick={async () => {
-              if (typeof window !== "undefined") {
-                localStorage.removeItem("islogin");
-                localStorage.removeItem("currentUser");
-                SetIslogin(false);
-                SetcurrentUser(null);
-                await fetch(`${apiurl}/api/logout`, { method: "GET" });
-
-                route.push("/");
-              }
+              localStorage.removeItem("islogin");
+              localStorage.removeItem("currentUser");
+              SetisLoggedIn(false);
+              SetcurrentUser(null);
+              await fetch(`${apiurl}/api/logout`, { method: "GET" });
+              route.push("/");
             }}
           >
             Logout
           </button>
+        </div>
+      )}
+
+      {open ? (
+        ""
+      ) : (
+        <div className="absolute top-4 left-4  ">
+          <RxHamburgerMenu
+            className="w-8 h-8 cursor-pointer text-black"
+            onClick={() => Setopen(!open)}
+          />
         </div>
       )}
     </aside>

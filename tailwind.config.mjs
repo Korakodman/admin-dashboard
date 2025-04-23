@@ -1,10 +1,15 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  darkMode: ["class"],
+// tailwind.config.js
+const { heroui } = require("@heroui/react");
+module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/Components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
-  plugins: [require("tailwindcss-animate")],
+  theme: {
+    extend: {},
+  },
+  darkMode: "class",
+  plugins: [heroui()],
 };
