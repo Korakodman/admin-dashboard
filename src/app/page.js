@@ -41,9 +41,14 @@ export default function Home() {
       const loginStatus = localStorage.getItem("islogin");
       const savedUser = localStorage.getItem("currentUser");
       if (loginStatus === "true" && savedUser) {
-        SetisLoggedIn(true);
-        SetcurrentUser(JSON.parse(savedUser));
-        router.push("/dashboard");
+        try {
+          SetisLoggedIn(true);
+          SetcurrentUser(JSON.parse(savedUser));
+          router.push("/dashboard");
+        } catch (error) {
+          console.error("Error parsing savedUser:", error);
+          router.push("/");
+        }
       } else {
         router.push("/");
       }
@@ -96,16 +101,13 @@ export default function Home() {
         const data = await response.json();
 
         // ตรวจสอบผลจาก API
-        if (data) {
+        if (data.success) {
           if (typeof window !== "undefined") {
             const loginStatus = localStorage.getItem("islogin");
             localStorage.setItem("islogin", "true");
-            localStorage.setItem(
-              "currentUser",
-              JSON.stringify(SelectUserLogin)
-            );
+            localStorage.setItem("currentUser", JSON.stringify(data.user));
             SetisLoggedIn(true);
-            SetcurrentUser(SelectUserLogin);
+            SetcurrentUser(data.user);
             router.push("/dashboard");
             seterror("");
           }

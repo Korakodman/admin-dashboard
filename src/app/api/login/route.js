@@ -20,7 +20,15 @@ export async function POST(req) {
       { status: 401, headers: corsHeaders }
     );
   }
-  const res = NextResponse.json({ success: true });
+  const res = NextResponse.json({
+    success: true,
+    user: {
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    },
+  });
+
   res.cookies.set("token", "mock-login-token", {
     httpOnly: true,
     secure: true,

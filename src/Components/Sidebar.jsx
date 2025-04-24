@@ -18,12 +18,17 @@ function MySidebar() {
   } = useContext(AuthContext);
   const apiurl = process.env.NEXT_PUBLIC_API_URL;
   const route = useRouter();
-
+  const [isAdmin, SetisAdmin] = useState(false);
   useEffect(() => {
     if (!currentUser) {
       const savedUser = localStorage.getItem("currentUser");
       if (savedUser) {
-        SetcurrentUser(JSON.parse(savedUser));
+        try {
+          // ตรวจสอบว่า savedUser เป็น JSON ที่สามารถ parse ได้
+          SetcurrentUser(JSON.parse(savedUser));
+        } catch (error) {
+          console.error("Error parsing savedUser:", error); // หาก parsing ผิดพลาด จะแสดง error
+        }
       }
     }
   }, []);
@@ -73,7 +78,9 @@ function MySidebar() {
           )}
 
           <SidebarItem href="/dashboard" icon={<FaHome />} text="Dashboard" />
-          <SidebarItem href="/users" icon={<FaUser />} text="Users" />
+          {currentUser.role === "Admin" && (
+            <SidebarItem href="/users" icon={<FaUser />} text="Users" />
+          )}
           <SidebarItem
             href="/settings"
             icon={<IoMdSettings />}
