@@ -7,6 +7,7 @@ import { AuthContext } from "../Context/UseContextHook";
 import { Avatar } from "@heroui/react";
 import CalenderHeroUI from "@/Components/CalanderHeroUI";
 import CardHeroUI from "@/Components/CardHeroUI";
+import MyChart from "@/Components/Chart";
 const Dashboard = () => {
   const {
     Islogin,
@@ -49,32 +50,39 @@ const Dashboard = () => {
               header={"Total Users"}
               description={"12"}
               footer={"+3 Today"}
+              bgcolor="bg-orange-400"
             />
             <CardHeroUI
               header={"Total Commits"}
               description={"101"}
               footer={"+7 Today"}
+              bgcolor="bg-blue-400"
             />
             <CardHeroUI
               header={"Active Sessions"}
               description={"4"}
               footer={"+1"}
+              bgcolor="bg-red-400"
             />
             <CardHeroUI
               header={"Pending Tasks"}
               description={"8"}
               footer={"-2 done"}
+              bgcolor="bg-gray-400"
             />
             <CardHeroUI
               header={"Revenue (THB)"}
               description={"฿12,300"}
               footer={"+฿1,200"}
+              bgcolor="bg-yellow-400"
             />
           </section>
 
-          <section className="px-10 mt-10">
+          <section className="px-10 mt-10 flex">
             <CalenderHeroUI />
+            <MyChart />
           </section>
+          <section></section>
         </section>
       </main>
     </div>

@@ -34,7 +34,7 @@ function MySidebar() {
         href={href}
         className="flex items-center gap-3 p-2 hover:bg-gray-700 rounded-lg md:text-xl text-xs"
       >
-        {icon} <span>{text}</span>
+        {icon} <span className={open ? "" : "hidden"}>{text}</span>
       </Link>
     );
   };
@@ -46,22 +46,26 @@ function MySidebar() {
       className={
         open
           ? "h-screen md:w-64 w-44 bg-gray-900 text-white grid justify-between "
-          : "h-screen md:w-0 w-0 bg-gray-900 text-white grid justify-between"
+          : "h-screen md:w-20 w-20 bg-gray-900 text-white grid justify-between"
       }
     >
       <div className="flex flex-col p-4">
         {/* โลโก้ */}
         <RxHamburgerMenu
           className=" w-[35px] h-[40px] hover:cursor-pointer"
-          onClick={() => Setopen(false)}
+          onClick={() => Setopen(!open)}
         />
 
-        <h2 className="md:text-xl text-[12px] font-bold mb-6 mt-2">
+        <h2
+          className={
+            open ? "md:text-xl text-[12px] font-bold mb-6 mt-2" : "hidden"
+          }
+        >
           Admin Dashboard
         </h2>
 
         {/* เมนู */}
-        <nav className="flex flex-col gap-4">
+        <nav className="flex flex-col gap-4 mt-2">
           {isLoggedIn ? (
             ""
           ) : (
@@ -99,17 +103,6 @@ function MySidebar() {
           >
             Logout
           </button>
-        </div>
-      )}
-
-      {open ? (
-        ""
-      ) : (
-        <div className="absolute top-4 left-4  ">
-          <RxHamburgerMenu
-            className="w-8 h-8 cursor-pointer text-black"
-            onClick={() => Setopen(!open)}
-          />
         </div>
       )}
     </aside>
