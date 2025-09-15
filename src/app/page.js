@@ -79,7 +79,7 @@ export default function Home() {
     e.preventDefault();
     if (!Isregister) {
       try {
-        const response = await fetch(`${apiurl}/api/login`, {
+        const response = await fetch(`/api/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -140,7 +140,7 @@ export default function Home() {
         if (!password) return seterror("ใส่รหัสด้วย");
         if (!secondpass) return seterror("ใส่รหัสยืนยันด้วย");
         const newUser = { username, lastname, password, role: "User" };
-        const response = await fetch(`${apiurl}/api/register`, {
+        const response = await fetch(`/api/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newUser),

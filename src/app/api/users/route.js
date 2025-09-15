@@ -10,7 +10,7 @@ export async function OPTIONS() {
   return NextResponse.json({}, { status: 200, headers: corsHeaders });
 }
 export async function GET() {
-  await connectToDatabase();
+  await connectToDatabase(process.env.NEXT_PUBLIC_API_URL);
   try {
     const users = await Users.find({});
     return NextResponse.json(users, { status: 200, headers: corsHeaders });
@@ -23,7 +23,7 @@ export async function GET() {
 }
 
 export async function POST(req) {
-  await connectToDatabase();
+  await connectToDatabase(process.env.NEXT_PUBLIC_API_URL);
   try {
     const body = await req.json();
     console.log("Received Data:", body);

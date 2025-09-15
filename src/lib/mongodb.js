@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const dburl = process.env.MONGODB_URI;
+const dburl = process.env.NEXT_PUBLIC_API_URL;
 let cached = global.mongoose;
 if (!dburl) {
   throw new Error("please insert your mongodb url");

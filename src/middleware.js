@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 export function middleware(request) {
   const token = request.cookies.get("token")?.value;
 
-  console.log("🌐 middleware is running");
-  console.log("🍪 token:", token);
+  // console.log("🌐 middleware is running");
+  // console.log("🍪 token:", token);
 
   if (!token) {
     console.log("❌ No token found → redirecting...");

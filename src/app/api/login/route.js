@@ -11,7 +11,7 @@ export async function OPTIONS() {
 }
 export async function POST(req) {
   const { username, password } = await req.json();
-  await connectToDatabase();
+  await connectToDatabase(process.env.NEXT_PUBLIC_API_URL);
   const user = await Users.findOne({ username });
   console.log(username, password);
   if (!user || user.password !== password) {

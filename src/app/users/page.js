@@ -42,7 +42,7 @@ export default function Users() {
     const fetchData = async () => {
       Setloading(true);
       try {
-        const res = await fetch(`${apiurl}api/users`);
+        const res = await fetch(`api/users`);
         const data = await res.json();
         setUsers(data);
       } catch (error) {
@@ -131,7 +131,7 @@ export default function Users() {
     }
 
     try {
-      const response = await fetch(`${apiurl}api/users`, {
+      const response = await fetch(`api/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(AddNewUser),
@@ -157,7 +157,7 @@ export default function Users() {
   async function DeleteOption(_id) {
     Setloading(true); // ✅ เริ่มโหลด
     try {
-      const response = await fetch(`${apiurl}api/users/${_id}`, {
+      const response = await fetch(`api/users/${_id}`, {
         method: "DELETE",
       });
 
@@ -177,7 +177,7 @@ export default function Users() {
     Setloading(true); // ✅ เริ่มโหลด
 
     try {
-      const response = await fetch(`${apiurl}api/users/${_id}`, {
+      const response = await fetch(`api/users/${_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedUser),

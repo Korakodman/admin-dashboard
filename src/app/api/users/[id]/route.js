@@ -16,7 +16,7 @@ export async function OPTIONS() {
 
 // DELETE method
 export async function DELETE(req, context) {
-  await connectToDatabase();
+  await connectToDatabase(process.env.NEXT_PUBLIC_API_URL);
   try {
     const { params } = await context;
     const id = await params.id;
@@ -53,7 +53,7 @@ export async function DELETE(req, context) {
 
 // PUT method
 export async function PUT(req, { params }) {
-  await connectToDatabase();
+  await connectToDatabase(process.env.NEXT_PUBLIC_API_URL);
   try {
     const _id = params.id; // รับ id จาก params
     const { username, lastname, role, password } = await req.json(); // รับข้อมูลใหม่จาก body ของ request

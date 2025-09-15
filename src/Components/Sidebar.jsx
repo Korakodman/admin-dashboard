@@ -16,7 +16,7 @@ function MySidebar() {
     SetcurrentUser,
     SelectUserLogin,
   } = useContext(AuthContext);
-  const apiurl = process.env.NEXT_PUBLIC_API_URL;
+  const URLMONGODB = process.env.URLMONGODB
   const route = useRouter();
   const [isAdmin, SetisAdmin] = useState(false);
   useEffect(() => {
@@ -104,7 +104,7 @@ function MySidebar() {
               localStorage.removeItem("currentUser");
               SetisLoggedIn(false);
               SetcurrentUser(null);
-              await fetch(`${apiurl}/api/logout`, { method: "GET" });
+              await fetch(`/api/logout`, { method: "GET" });
               route.push("/");
             }}
           >
