@@ -16,21 +16,27 @@ function MySidebar() {
     SetcurrentUser,
     SelectUserLogin,
   } = useContext(AuthContext);
-  const URLMONGODB = process.env.URLMONGODB
   const route = useRouter();
   const [isAdmin, SetisAdmin] = useState(false);
   useEffect(() => {
+   const mock = localStorage.getItem("currentUser");
+   const changeobj = JSON.parse(mock)
+   SetcurrentUser(changeobj)
     if (!currentUser) {
       const savedUser = localStorage.getItem("currentUser");
       if (savedUser) {
+         
         try {
           // ตรวจสอบว่า savedUser เป็น JSON ที่สามารถ parse ได้
+
           SetcurrentUser(JSON.parse(savedUser));
+           
         } catch (error) {
           console.error("Error parsing savedUser:", error); // หาก parsing ผิดพลาด จะแสดง error
         }
       }
     }
+    
   }, []);
 
   const SidebarItem = ({ href, icon, text }) => {
@@ -103,7 +109,7 @@ function MySidebar() {
               localStorage.removeItem("islogin");
               localStorage.removeItem("currentUser");
               SetisLoggedIn(false);
-              SetcurrentUser(null);
+            
               await fetch(`/api/logout`, { method: "GET" });
               route.push("/");
             }}

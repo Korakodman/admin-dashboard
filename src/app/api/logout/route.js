@@ -16,7 +16,7 @@ export async function GET() {
   res.cookies.set("token", "", {
     httpOnly: true,
     path: "/",
-    expires: new Date(0),
+    expires: new Date(0), 
   });
   return res;
 }
