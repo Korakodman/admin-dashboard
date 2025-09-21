@@ -105,10 +105,10 @@ export default function Home() {
           if (typeof window !== "undefined") {
             const loginStatus = localStorage.getItem("islogin");
             localStorage.setItem("islogin", "true");
-            localStorage.setItem("currentUser", JSON.stringify(data));
+            localStorage.setItem("currentUser", JSON.stringify(data.user));
             SetisLoggedIn(true);
          
-            SetcurrentUser(data);
+            SetcurrentUser(data.user);
             router.push("/dashboard");
             seterror("");
           }

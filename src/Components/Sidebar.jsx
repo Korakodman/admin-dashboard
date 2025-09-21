@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FaHome, FaUser } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { TbLogout } from "react-icons/tb";
 
 import { AuthContext } from "../app/Context/UseContextHook";
 import { useRouter } from "next/navigation";
@@ -90,18 +91,20 @@ function MySidebar() {
           <SidebarItem
             href="/settings"
             icon={<IoMdSettings />}
-            text="Settings"
+            text="Settings" 
           />
         </nav>
       </div>
       {isLoggedIn && currentUser && (
-        <div
-          className={`p-2 grid font-bold border h-28 mt-auto md:ml-3 text-[12px] border-white rounded-lg bg-gray-700 md:text-lg ${
+        
+        <div className="  h-fit p-2 rounded-md mt-[450px] flex justify-center">
+          <div
+          className={` border-white rounded-md bg-gray-700 p-2 grid w-[200px] ${
             open ? "" : "hidden"
           }`}
         >
-          <div className="flex items-center gap-2">
-            <FaUser /> User: <span>{currentUser.username}</span>
+          <div className="flex items-center gap-2 mr-2 mb-2">
+            <FaUser /> User: <span className="w-10">{currentUser.username}</span>
           </div>
           <button
             className="text-black bg-red-300 md:p-2 hover:bg-red-500 rounded-md"
@@ -117,7 +120,30 @@ function MySidebar() {
             Logout
           </button>
         </div>
-      )}
+        <div
+          className={` border-white rounded-md bg-gray-700 p-2 grid  ${open ? "hidden" : " mt-[180px]"} `}
+        >
+          <div className={`flex items-center gap-2 ${open ? "" : "hidden"} `}>
+            <FaUser /> User: <span>{currentUser.username}</span>
+          </div>
+          <button
+            className="text-black bg-red-300 md:p-2 hover:bg-red-500 rounded-md "
+            onClick={async () => {
+              localStorage.removeItem("islogin");
+              localStorage.removeItem("currentUser");
+              SetisLoggedIn(false);
+            
+              await fetch(`/api/logout`, { method: "GET" });
+              route.push("/");
+            }}
+          >
+           <TbLogout />
+
+          </button>
+        </div>
+        </div>
+     
+     )}
     </aside>
   );
 }
