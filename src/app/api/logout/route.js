@@ -11,7 +11,7 @@ export async function OPTIONS() {
 }
 export async function GET() {
   const res = NextResponse.redirect(
-    new URL(process.env.URLMONGODB, process.env.URLMONGODB),{status : 302 , headers:corsHeaders}
+    new URL(process.env.URLMONGODB),{status : 302 , headers:corsHeaders}
   );
   res.cookies.set("token", "", {
     httpOnly: true,
