@@ -104,7 +104,7 @@ export default function Home() {
         if (data.success) {
           if (typeof window !== "undefined") {
             const loginStatus = localStorage.getItem("islogin");
-            localStorage.setItem("islogin", "true");
+            localStorage.setItem(loginStatus, "true");
             localStorage.setItem("currentUser", JSON.stringify(data.user));
             SetisLoggedIn(true);
          

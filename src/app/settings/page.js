@@ -1,24 +1,26 @@
 "use client";
-import { useState } from "react";
+import { useContext, useState ,useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {Form, Input, Button} from "@heroui/react";
-
+import { AuthContext } from "../Context/UseContextHook";
 // "name": "John Doe",
 //         "email": "john@example.com",
 //         "age":
 export default function Settings() {
   const [user, setuser] = useState([]);
   const Route = useRouter();
+  const {
+    Islogin,
+    SetIslogin,
+    DataBaseUser,
+    currentUser,
+    SetcurrentUser,
+    SelectUserLogin,
+  } = useContext(AuthContext);
       const [action, setAction] = useState(null);
   // useEffect(() => {
-  //   const loginStatus = localStorage.getItem("isLogin");
-  //   if (loginStatus === "true") {
-  //     Route.push("/settings");
-  //   } else {
-  //     alert("กรุณาเข้าระบบ");
-  //     Route.push("/");
-  //   }
-  // }, []);
+  //   const mock = localStorage.getItem("currentUser");
+  // },[]);
   return (
     <div className="p-6 ">
       <h1 className="text-2xl font-bold mb-4">Settings Management</h1>
@@ -34,22 +36,23 @@ export default function Settings() {
       }}
     >
       <Input
-        isRequired
+        isDisabled
         errorMessage="Please enter a valid username"
         label="Username"
         labelPlacement="outside"
         name="username"
-        placeholder="Enter your username"
+        placeholder="TEST"
         type="text"
+        
       />
 
       <Input
-        isRequired
+        isDisabled
         errorMessage="Please enter a valid email"
         label="Password"
         labelPlacement="outside"
         name="password"
-        placeholder="Enter your email"
+        placeholder="******"
         type="password"
       />
       <div className="flex gap-2">
