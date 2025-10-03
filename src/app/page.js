@@ -38,12 +38,14 @@ export default function Home() {
     // FetchApi();
 
     if (typeof window !== "undefined") {
-      const loginStatus = localStorage.getItem("islogin");
+      const loginStatus = localStorage.getItem("isLoggedIn");
       const savedUser = localStorage.getItem("currentUser");
-      if (loginStatus === "true" && savedUser) {
+   
+      if (loginStatus === "true") {
         try {
           SetisLoggedIn(true);
           SetcurrentUser(JSON.parse(savedUser));
+          
           router.push("/dashboard");
         } catch (error) {
           console.error("Error parsing savedUser:", error);
@@ -51,6 +53,7 @@ export default function Home() {
         }
       } else {
         router.push("/");
+           console.log(savedUser)
       }
     }
   }, []);
@@ -155,7 +158,7 @@ export default function Home() {
             alert("Register Successfully!!");
             SetcurrentUser(newUser);
             SetisLoggedIn(true);
-            router.push("/users");
+            router.push("/dashboard");
           }
         } else if (!response.ok) {
           seterror("มีชื่อผู้ใช้ซ้ำ");

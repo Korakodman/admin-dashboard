@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const dburl = process.env.NEXT_PUBLIC_API_URL;
 
-const isConnented = false;
+let isConnented = false;
 
 if (!dburl) {
   throw new Error("please insert your mongodb url");
