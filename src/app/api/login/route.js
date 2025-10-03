@@ -10,9 +10,13 @@ export async function OPTIONS() {
   return NextResponse.json({}, { status: 200, headers: corsHeaders });
 }
 export async function POST(req) {
+
   const { username, password } = await req.json();
+
   await connectToDatabase(process.env.NEXT_PUBLIC_API_URL);
+
   const user = await Users.findOne({ username });
+
   if (!user || user.password !== password) {
     return NextResponse.json(
       { success: false, message: "something Wrong" },
@@ -33,6 +37,6 @@ export async function POST(req) {
     secure: true,
     path: "/",
     maxAge: 60 * 60,
-  });
+  }); 
   return res;
 }
